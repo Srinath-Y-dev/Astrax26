@@ -1,0 +1,30 @@
+.countdown{
+    display:flex;
+    gap:40px;
+
+    margin-top:50px;
+
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+}
+
+.countdown div{
+    text-align:center;
+}
+
+.countdown h2{
+    font-size:3rem;
+    font-weight:700;
+
+    color:#ff5a36;
+}
+
+.countdown span{
+    font-size:0.9rem;
+
+    letter-spacing:2px;
+
+    color:#ddd;
+}

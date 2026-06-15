@@ -1,3 +1,5 @@
+import "../styles/Navbar.css";
+
 // src/components/Navbar.jsx
 
 function Navbar() {

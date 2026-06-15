@@ -1,3 +1,7 @@
+import "../styles/Hero.css";
+
+import Countdown from "./Countdown";
+
 // src/components/Hero.jsx
 
 function Hero() {
@@ -16,6 +20,8 @@ function Hero() {
         <button>Register Now</button>
         <button>Explore Events</button>
       </div>
+
+      <Countdown />
 
     </section>
   );

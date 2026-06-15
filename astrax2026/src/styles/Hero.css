@@ -1,0 +1,69 @@
+/* HERO */
+
+.hero-content{
+  height:100vh;
+  padding-top: 50px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  color:white;
+  text-align:center;
+}
+
+.hero-content h1{
+  font-size:6rem;
+
+  font-family:'Orbitron', sans-serif;
+
+  font-weight:800;
+
+  letter-spacing:4px;
+
+  text-shadow:
+      0 0 20px rgba(255,255,255,0.2);
+}
+
+.hero-content h1 span{
+  color:#ff5a36;
+}
+
+.hero-content p{
+  margin-top:15px;
+
+  letter-spacing:4px;
+
+  font-size:1.2rem;
+
+  color:#ddd;
+}
+
+.hero-buttons{
+  margin-top:30px;
+  display:flex;
+  gap:20px;
+}
+
+.hero-buttons button{
+  padding:15px 30px;
+
+  border:1px solid #ff5a36;
+
+  background:transparent;
+  color:white;
+
+  border-radius:8px;
+
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+.hero-buttons button:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+      0 0 15px rgba(255,90,54,0.5);
+}
