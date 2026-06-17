@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import "../styles/Countdown.css";
 
-function Countdown() {
+const EVENT_DATE = new Date("2026-07-20T09:00:00");
 
-  const eventDate = new Date("2026-07-20T09:00:00");
+function Countdown() {
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -18,7 +18,7 @@ function Countdown() {
 
       const now = new Date();
 
-      const difference = eventDate - now;
+      const difference = EVENT_DATE - now;
 
       if (difference > 0) {
 
@@ -56,28 +56,28 @@ function Countdown() {
   return (
     <div className="countdown">
 
-      <div>
+      <div className="countdown-card">
         <h2>{timeLeft.days}</h2>
         <span>DAYS</span>
       </div>
 
-      <h3>:</h3>
+      <h3 className="countdown-separator">:</h3>
 
-      <div>
+      <div className="countdown-card">
         <h2>{String(timeLeft.hours).padStart(2, "0")}</h2>
         <span>HOURS</span>
       </div>
 
-      <h3>:</h3>
+      <h3 className="countdown-separator">:</h3>
 
-      <div>
+      <div className="countdown-card">
         <h2>{String(timeLeft.minutes).padStart(2, "0")}</h2>
         <span>MINUTES</span>
       </div>
 
-      <h3>:</h3>
+      <h3 className="countdown-separator">:</h3>
 
-      <div>
+      <div className="countdown-card">
         <h2>{String(timeLeft.seconds).padStart(2, "0")}</h2>
         <span>SECONDS</span>
       </div>

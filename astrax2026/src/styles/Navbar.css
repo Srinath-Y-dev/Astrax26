@@ -14,26 +14,53 @@
 
     padding:0 60px;
 
-    background:rgba(0,0,0,0.45);
-    backdrop-filter:blur(15px);
+    background:rgba(15, 16, 21, 0.7);
+    backdrop-filter:blur(20px);
 
-    border-bottom:1px solid rgba(255,255,255,0.08);
+    border-bottom:1px solid rgba(226, 54, 54, 0.15);
 
     z-index:1000;
+    transition: background var(--transition-med);
 }
 
 .logo{
-    color:white;
+    font-size: 2.2rem;
+    font-family: var(--font-bebas);
+    font-weight: 800;
 
-    font-size:2.2rem;
-    font-family:'Orbitron', sans-serif;
-    font-weight:800;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
 
-    letter-spacing:2px;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: url('../assets/marvel_comic_panels.png');
+    background-size: 300px auto;
+    animation: flipbook 1.5s steps(10) infinite;
+    text-shadow: none;
 }
 
-.logo span{
-  color:#ff5a36;
+.logo:hover {
+  -webkit-text-fill-color: var(--marvel-white);
+  color: var(--marvel-white);
+  background-image: none;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  animation-play-state: paused;
+}
+
+.logo span {
+  font-family: var(--font-orbitron);
+  color: var(--marvel-red);
+  -webkit-text-fill-color: var(--marvel-red);
+  font-weight: 900;
+  font-style: normal;
+  text-shadow: 0 0 12px var(--marvel-red-glow);
+  display: inline-block;
+  margin: 0 4px;
 }
 
 .nav-links{
@@ -43,28 +70,55 @@
 }
 
 .nav-links li{
-    color:white;
-
+    color: var(--marvel-white);
     position:relative;
-
-    font-size:1rem;
+    font-family: var(--font-orbitron);
+    font-size:0.9rem;
     font-weight:500;
-
-    transition:.3s;
+    letter-spacing: 1px;
+    transition: color var(--transition-fast);
     cursor:pointer;
 }
 
 .nav-links li:hover{
-    color:#ff5a36;
+    color: var(--marvel-red);
+}
+
+.nav-links li::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -6px;
+  left: 50%;
+  background-color: var(--marvel-red);
+  transition: width var(--transition-med), left var(--transition-med);
+}
+
+.nav-links li:hover::after {
+  width: 100%;
+  left: 0;
 }
 
 .register-btn{
-  padding:12px 24px;
+  padding:12px 28px;
 
-  background:#ff5a36;
-  border:none;
-  color:white;
+  background: var(--marvel-red);
+  border: 1px solid var(--marvel-red);
+  color: var(--marvel-white);
+  font-family: var(--font-bebas);
+  font-size: 1.1rem;
+  letter-spacing: 1.5px;
 
-  border-radius:8px;
+  border-radius: 4px;
   cursor:pointer;
+  transition: all var(--transition-med);
+  box-shadow: 0 4px 15px rgba(226, 54, 54, 0.3);
 }
+
+.register-btn:hover {
+  background: transparent;
+  color: var(--marvel-red);
+  box-shadow: 0 0 20px var(--marvel-red-glow);
+  transform: translateY(-2px);
+}
