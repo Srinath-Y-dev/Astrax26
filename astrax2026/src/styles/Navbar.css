@@ -42,10 +42,7 @@
   transition: transform var(--transition-med), filter var(--transition-med);
 }
 
-.logo:hover .logo-img {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 10px var(--theme-purple-glow));
-}
+
 
 .nav-links{
   display:flex;

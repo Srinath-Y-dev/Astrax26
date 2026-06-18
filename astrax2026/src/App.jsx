@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./App.css";
 import "./styles/Pages.css";
 
@@ -12,42 +12,78 @@ import Sponsors from "./components/Sponsors";
 import BlipParticles from "./components/BlipParticles";
 
 import bgVideo from "./assets/hero-video.mp4";
+import introVideo from "./assets/intro.mp4";
 
 function App() {
-  const [activeTab, setActiveTab] = useState("Home");
-  const [isBlipping, setIsBlipping] = useState(false);
+  const [showIntro, setShowIntro]   = useState(true);
+  const [fadeIntro, setFadeIntro]   = useState(false);
+  const videoRef = useRef(null);
+  const pageContainerRef = useRef(null);
+
+  const [blipPhase, setBlipPhase]   = useState(null); // null | 'dissolve' | 'reform'
+  const [activeTab, setActiveTab]   = useState("Home");
   const [displayTab, setDisplayTab] = useState("Home");
-  const [stoneColor, setStoneColor] = useState("#a872ff"); // default Power (purple)
+  const [stoneColor, setStoneColor] = useState("#a872ff");
+
+  const handleIntroEnd = () => {
+    setFadeIntro(true);
+    setTimeout(() => setShowIntro(false), 800);
+  };
+
+  const handleSkip = () => handleIntroEnd();
 
   const stoneColors = {
-    Home: "#a872ff",       // Power (Purple)
-    Events: "#3aff8f",     // Time (Green)
-    "About Us": "#ff3e70", // Reality (Red)
-    Workshops: "#ff8e3c",  // Soul (Orange)
-    Gallery: "#ffe14c",    // Mind (Yellow)
-    Sponsors: "#3cb6ff",   // Space (Blue)
+    Home:       "#a872ff",
+    Events:     "#3aff8f",
+    "About Us": "#ff3e70",
+    Workshops:  "#ff8e3c",
+    Gallery:    "#ffe14c",
+    Sponsors:   "#3cb6ff",
   };
 
   const handleTabChange = (tabName) => {
-    if (tabName === activeTab || isBlipping) return;
+    if (tabName === activeTab || blipPhase !== null) return;
 
-    setStoneColor(stoneColors[tabName] || "#a872ff");
-    setIsBlipping(true);
     setActiveTab(tabName);
+    setStoneColor(stoneColors[tabName] || "#a872ff");
 
-    // Halfway through the blip transition, swap the actual displayed page component
+    // Phase 1 – 'dissolve': clip-path sweeps L→R, particles spawn at front
+    setBlipPhase("dissolve");
+
+    // Phase 2 – content fully gone (1100ms dissolve + 50ms buffer)
+    // Swap page and start 'reform' fade-in
     setTimeout(() => {
       setDisplayTab(tabName);
-    }, 600);
+      setBlipPhase("reform");
+    }, 1150);
 
-    // Reset blip status
+    // Phase 3 – reform animation done, cleanup everything
     setTimeout(() => {
-      setIsBlipping(false);
-    }, 1200);
+      setBlipPhase(null);
+    }, 1900);
   };
 
   return (
     <div className="app">
+      {showIntro && (
+        <div className={`intro-preloader ${fadeIntro ? "fade-out" : ""}`}>
+          <video
+            ref={videoRef}
+            src={introVideo}
+            autoPlay
+            muted
+            playsInline
+            onEnded={handleIntroEnd}
+            className="intro-video"
+          />
+          <div className="intro-controls">
+            <button className="intro-btn skip-btn" onClick={handleSkip}>
+              SKIP INTRO <span className="arrow">→</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       <video
         autoPlay
         muted
@@ -62,16 +98,19 @@ function App() {
 
       <Navbar activeTab={activeTab} onTabChange={handleTabChange} />
 
-      <div className={`page-container ${isBlipping ? "blipping" : ""}`}>
-        {displayTab === "Home" && <Hero />}
-        {displayTab === "Events" && <Events />}
-        {displayTab === "About Us" && <AboutUs />}
-        {displayTab === "Workshops" && <Workshops />}
-        {displayTab === "Gallery" && <Gallery />}
-        {displayTab === "Sponsors" && <Sponsors />}
+      <div
+        ref={pageContainerRef}
+        className={`page-container${blipPhase === "dissolve" ? " dissolving" : ""}${blipPhase === "reform" ? " reforming" : ""}`}
+      >
+        {displayTab === "Home"       && <Hero />}
+        {displayTab === "Events"     && <Events />}
+        {displayTab === "About Us"   && <AboutUs />}
+        {displayTab === "Workshops"  && <Workshops />}
+        {displayTab === "Gallery"    && <Gallery />}
+        {displayTab === "Sponsors"   && <Sponsors />}
       </div>
 
-      {isBlipping && <BlipParticles color={stoneColor} />}
+      {blipPhase !== null && <BlipParticles color={stoneColor} pageRef={pageContainerRef} />}
     </div>
   );
 }

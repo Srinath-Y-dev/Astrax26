@@ -36,19 +36,14 @@ body{
   overflow-x:hidden;
 }
 
-/* CUSTOM SCROLLBAR */
+/* HIDE SCROLLBARS GLOBALLY */
 ::-webkit-scrollbar {
-  width: 8px;
+  display: none;
 }
-::-webkit-scrollbar-track {
-  background: var(--marvel-black);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--theme-purple);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--theme-purple-dark);
+
+body, .app, * {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* ANIMATIONS */

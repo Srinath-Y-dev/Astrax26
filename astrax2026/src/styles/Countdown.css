@@ -1,7 +1,7 @@
 .countdown {
     display: flex;
-    gap: 20px;
-    margin-top: 50px;
+    gap: 16px;
+    margin-top: 32px;
     justify-content: center;
     align-items: center;
     color: var(--marvel-white);
@@ -11,116 +11,96 @@
 
 .countdown-card {
     text-align: center;
-    background: rgba(15, 16, 21, 0.7);
-    border: 1px solid rgba(139, 92, 246, 0.25);
-    border-top: 3.5px solid var(--theme-purple);
-    border-radius: 6px;
-    padding: 20px 24px;
-    min-width: 120px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-    transform: skewX(-8deg);
-    transition: all var(--transition-med);
+    background: none;
+    border: none;
+    border-top: none;
+    border-radius: 0;
+    padding: 4px 6px;
+    min-width: 70px;
+    backdrop-filter: none;
+    box-shadow: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-/* HORIZONTAL SCOREBOARD DIVIDER LINE */
-.countdown-card::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 1.5px;
-    background: rgba(0, 0, 0, 0.55);
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
-    z-index: 2;
-    pointer-events: none;
-}
-
-/* LASER SCANNING LIGHT SWEEP */
-.countdown-card::after {
-    content: '';
-    position: absolute;
-    top: -150%;
-    left: -150%;
-    width: 300%;
-    height: 300%;
-    background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(212, 175, 55, 0) 35%,
-        rgba(212, 175, 55, 0.5) 50%,
-        rgba(212, 175, 55, 0) 65%,
-        transparent 100%
-    );
-    transform: rotate(-35deg);
-    transition: all 0.65s cubic-bezier(0.25, 1, 0.5, 1);
-    pointer-events: none;
-    opacity: 0;
-    z-index: 3;
+    overflow: visible;
+    cursor: default;
 }
 
 .countdown-card:hover {
-    transform: translateY(-8px) scale(1.08) skewX(-8deg);
-    border-color: var(--theme-gold);
-    box-shadow: 0 15px 35px var(--theme-gold-glow);
-}
-
-.countdown-card:hover::after {
-    top: 150%;
-    left: 150%;
-    opacity: 1;
+    transform: translateY(-2px) scale(1.05);
 }
 
 .countdown h2 {
-    font-size: 3.6rem;
+    font-size: 2.2rem;
     font-weight: 800;
     font-family: var(--font-orbitron);
-    color: var(--marvel-white);
+    color: #ffffff; /* Clean white numbers */
     line-height: 1.1;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-    margin-bottom: 6px;
-    transition: all var(--transition-med);
-    transform: skewX(8deg); /* Un-skew typography to stand straight */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 255, 255, 0.15);
+    margin-bottom: 4px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
 }
 
 .countdown-card:hover h2 {
-    color: var(--marvel-white);
+    color: #ffffff;
     text-shadow: 
-      0 0 15px var(--theme-purple-glow),
-      0 0 30px rgba(139, 92, 246, 0.4);
+      0 0 12px rgba(255, 255, 255, 0.75),
+      0 0 24px rgba(255, 255, 255, 0.35);
 }
 
 .countdown span {
-    font-size: 0.85rem;
-    font-family: var(--font-bebas);
-    font-weight: bold;
-    letter-spacing: 2.5px;
-    color: #a4a8bc;
+    font-size: 0.6rem;
+    font-family: var(--font-orbitron);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #a0a5b5; /* Soft light silver-grey labels */
     display: block;
-    transition: color var(--transition-med);
-    transform: skewX(8deg); /* Un-skew label text */
+    transition: color 0.3s ease;
 }
 
 .countdown-card:hover span {
-    color: var(--theme-gold);
-    text-shadow: 0 0 5px var(--theme-gold-glow);
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 .countdown-separator {
-    font-size: 3rem;
+    font-size: 1.8rem;
     font-family: var(--font-orbitron);
     font-weight: bold;
-    color: var(--theme-gold);
-    text-shadow: 0 0 12px var(--theme-gold-glow);
+    color: #ffffff; /* White separator dots */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
     animation: blink 1.5s infinite;
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
 @keyframes blink {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
+    50% { opacity: 0.2; }
+}
+
+/* Responsive adjustment for mobile screen sizing */
+@media (max-width: 768px) {
+    .countdown {
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .countdown-card {
+        padding: 4px;
+        min-width: 60px;
+    }
+
+    .countdown h2 {
+        font-size: 1.8rem;
+    }
+
+    .countdown span {
+        font-size: 0.52rem;
+        letter-spacing: 1px;
+    }
+
+    .countdown-separator {
+        font-size: 1.4rem;
+        transform: translateY(-2px);
+    }
+}
