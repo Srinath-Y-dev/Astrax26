@@ -48,10 +48,14 @@ function Hero() {
             <div
               className="stone-gem"
               style={{
-                background: `radial-gradient(circle at 35% 35%, #fff 0%, ${stone.color} 45%, #000 100%)`,
-                boxShadow: `0 0 12px ${stone.color}, 0 0 30px ${stone.color}55`,
+                "--stone-color": stone.color,
+                "--stone-glow": `${stone.color}99`,
               }}
-            />
+            >
+              <div className="stone-core" style={{ background: stone.color }} />
+              <div className="stone-facets" />
+              <div className="stone-glint" />
+            </div>
             <span className="stone-label" style={{ color: stone.color }}>{stone.label}</span>
           </div>
         ))}

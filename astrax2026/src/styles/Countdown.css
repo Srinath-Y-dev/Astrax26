@@ -31,7 +31,7 @@
 
 .countdown h2 {
     font-size: 2.2rem;
-    font-weight: 800;
+    font-weight: 300;
     font-family: var(--font-orbitron);
     color: #ffffff; /* Clean white numbers */
     line-height: 1.1;
@@ -51,7 +51,7 @@
 .countdown span {
     font-size: 0.6rem;
     font-family: var(--font-orbitron);
-    font-weight: 700;
+    font-weight: 400;
     letter-spacing: 1.5px;
     color: #a0a5b5; /* Soft light silver-grey labels */
     display: block;
@@ -66,7 +66,7 @@
 .countdown-separator {
     font-size: 1.8rem;
     font-family: var(--font-orbitron);
-    font-weight: bold;
+    font-weight: 300;
     color: #ffffff; /* White separator dots */
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
     animation: blink 1.5s infinite;
