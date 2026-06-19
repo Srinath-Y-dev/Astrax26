@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
+import html2canvas from "html2canvas";
 import "./App.css";
 import "./styles/Pages.css";
 
@@ -25,6 +26,10 @@ function App() {
   const [displayTab, setDisplayTab] = useState("Home");
   const [stoneColor, setStoneColor] = useState("#a872ff");
 
+  const snapshotRef = useRef(null);
+  const captureRectRef = useRef(null);
+  const busy = useRef(false);
+
   const handleIntroEnd = () => {
     setFadeIntro(true);
     setTimeout(() => setShowIntro(false), 800);
@@ -41,26 +46,78 @@ function App() {
     Sponsors:   "#3cb6ff",
   };
 
-  const handleTabChange = (tabName) => {
-    if (tabName === activeTab || blipPhase !== null) return;
+  /* Called by BlipParticles after its FIRST canvas draw.
+     Only NOW do we hide the DOM — so the switch is seamless. */
+  const handleFirstDraw = useCallback(() => {
+    if (pageContainerRef.current) {
+      pageContainerRef.current.style.opacity = "0";
+      pageContainerRef.current.style.transition = "none";
+    }
+  }, []);
 
+  const handleTabChange = async (tabName) => {
+    if (tabName === activeTab || blipPhase !== null || busy.current) return;
+    busy.current = true;
+
+    /* ── 1. Record the element's EXACT screen position ── */
+    const rect = pageContainerRef.current.getBoundingClientRect();
+    captureRectRef.current = {
+      x: rect.left,
+      y: rect.top,
+      w: rect.width,
+      h: rect.height,
+    };
+
+    /* ── 2. Capture current content BEFORE any state changes ── */
+    /* Inject a temp style to disable backdrop-filters and shadows —
+       html2canvas notoriously renders backdrop-filters as solid white boxes. */
+    const tempStyle = document.createElement("style");
+    tempStyle.textContent =
+      ".page-container, .page-container * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: none !important; }";
+    document.head.appendChild(tempStyle);
+
+    try {
+      snapshotRef.current = await html2canvas(pageContainerRef.current, {
+        backgroundColor: null,
+        scale: 0.5,
+        logging: false,
+        useCORS: true,
+        allowTaint: true,
+        removeContainer: true,
+      });
+    } catch {
+      tempStyle.remove();
+      busy.current = false;
+      setActiveTab(tabName);
+      setDisplayTab(tabName);
+      setStoneColor(stoneColors[tabName] || "#a872ff");
+      return;
+    }
+    tempStyle.remove();
+
+    /* ── 3. Update state — BlipParticles mounts, draws first frame,
+            THEN calls handleFirstDraw to hide the DOM. ── */
     setActiveTab(tabName);
     setStoneColor(stoneColors[tabName] || "#a872ff");
-
-    // Phase 1 – 'dissolve': clip-path sweeps L→R, particles spawn at front
     setBlipPhase("dissolve");
 
-    // Phase 2 – content fully gone (1100ms dissolve + 50ms buffer)
-    // Swap page and start 'reform' fade-in
+    /* ── 4. After dissolve → swap content + reform ── */
     setTimeout(() => {
+      if (pageContainerRef.current) {
+        pageContainerRef.current.style.opacity = "";
+        pageContainerRef.current.style.transition = "";
+      }
       setDisplayTab(tabName);
       setBlipPhase("reform");
-    }, 1150);
+    }, 2200);
 
-    // Phase 3 – reform animation done, cleanup everything
+    /* ── 5. Cleanup ── */
     setTimeout(() => {
       setBlipPhase(null);
-    }, 1900);
+      snapshotRef.current = null;
+      captureRectRef.current = null;
+      busy.current = false;
+    }, 3100);
   };
 
   return (
@@ -110,7 +167,15 @@ function App() {
         {displayTab === "Sponsors"   && <Sponsors />}
       </div>
 
-      {blipPhase !== null && <BlipParticles color={stoneColor} pageRef={pageContainerRef} />}
+      {blipPhase === "dissolve" && snapshotRef.current && (
+        <BlipParticles
+          key={"dissolve-" + activeTab}
+          phase="dissolve"
+          snapshot={snapshotRef.current}
+          captureRect={captureRectRef.current}
+          onFirstDraw={handleFirstDraw}
+        />
+      )}
     </div>
   );
 }

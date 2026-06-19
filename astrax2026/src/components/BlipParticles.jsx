@@ -1,270 +1,352 @@
 import { useEffect, useRef } from "react";
 
-function BlipParticles({ color, pageRef }) {
+/* ──────────────────────────────────────────────
+ *  2D Value Noise — organic disintegration map
+ * ────────────────────────────────────────────── */
+function hash2D(ix, iy) {
+  let h = (ix * 374761393 + iy * 668265263) | 0;
+  h = Math.abs(((h ^ (h >> 13)) * 1274126177) | 0);
+  return (h & 0x7fffffff) / 0x7fffffff;
+}
+
+function valueNoise(x, y) {
+  const ix = Math.floor(x), iy = Math.floor(y);
+  const fx = x - ix, fy = y - iy;
+  const sx = fx * fx * (3 - 2 * fx);
+  const sy = fy * fy * (3 - 2 * fy);
+  return (
+    (hash2D(ix, iy) * (1 - sx) + hash2D(ix + 1, iy) * sx) * (1 - sy) +
+    (hash2D(ix, iy + 1) * (1 - sx) + hash2D(ix + 1, iy + 1) * sx) * sy
+  );
+}
+
+function fbm(x, y, octaves = 4) {
+  let v = 0, a = 1, f = 1, m = 0;
+  for (let i = 0; i < octaves; i++) {
+    v += valueNoise(x * f, y * f) * a;
+    m += a; a *= 0.5; f *= 2;
+  }
+  return v / m;
+}
+
+/* ──────────────────────────────────────────────────────────
+ *  BlipParticles — Thanos-snap disintegration
+ *
+ *  Props:
+ *    snapshot    – HTMLCanvasElement from html2canvas
+ *    captureRect – { x, y, w, h } element's screen position
+ *    onFirstDraw – callback: hides DOM after canvas renders
+ *
+ *  The canvas draws the snapshot at the EXACT position the
+ *  element occupied on screen (using captureRect).  Cells
+ *  break in organic patches (fractal noise), turning into
+ *  dust that drifts left & upward.
+ * ────────────────────────────────────────────────────────── */
+function BlipParticles({ phase, snapshot, captureRect, onFirstDraw }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    if (phase !== "dissolve" || !snapshot || !captureRect) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    let width  = (canvas.width  = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let W = (canvas.width = window.innerWidth);
+    let H = (canvas.height = window.innerHeight);
 
-    const handleResize = () => {
-      width  = canvas.width  = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    const onResize = () => {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
     };
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", onResize);
 
-    const hexToRgb = (hex) => {
-      const c = hex.replace("#", "");
-      return {
-        r: parseInt(c.slice(0, 2), 16),
-        g: parseInt(c.slice(2, 4), 16),
-        b: parseInt(c.slice(4, 6), 16),
-      };
-    };
-    const rgb = hexToRgb(color);
+    /* ── Snapshot data ── */
+    const sw = snapshot.width, sh = snapshot.height;
+    const snapCtx = snapshot.getContext("2d");
+    const imgData = snapCtx.getImageData(0, 0, sw, sh);
+    const px = imgData.data;
 
-    const variant = (alpha = 1) => {
-      const v = () => Math.floor(Math.random() * 80 - 40);
-      return `rgba(${Math.min(255, Math.max(0, rgb.r + v()))},${Math.min(255, Math.max(0, rgb.g + v()))},${Math.min(255, Math.max(0, rgb.b + v()))},${alpha})`;
-    };
+    /* ── Scale: snapshot pixels → screen pixels ──
+     *  captureRect.w / sw = how many screen-px per snapshot-px
+     *  captureRect.x,y    = element's screen offset              */
+    const scX = captureRect.w / sw;
+    const scY = captureRect.h / sh;
+    const offX = captureRect.x;
+    const offY = captureRect.y;
 
-    class Particle {
-      constructor(x, y) {
-        // Organic position deviation around the front line
-        this.x = x + (Math.random() - 0.5) * 15;
-        this.y = y + (Math.random() - 0.5) * 15;
+    /* ── Config ── */
+    const CELL = 5;
+    const DURATION = 1700;
+    const TRAIL = 1400;
+    const seed = Math.random() * 100;
 
-        // Dust particles are small, sharp, and fine
-        this.shape = Math.floor(Math.random() * 3);
-        this.size  = Math.random() * 4.0 + 1.5;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
 
-        // Initial velocity with a spread, floating upward and backward (left)
-        const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.8;
-        const speed = Math.random() * 4.0 + 1.5; // Slightly faster to blow away like dust
-        this.vx = Math.cos(angle) * speed - (Math.random() * 0.8 + 0.4); 
-        this.vy = Math.sin(angle) * speed - 0.5; 
+    /* ── Build cell grid ── */
+    const cells = [];
+    const particles = [];
 
-        // Random internal turbulence factor
-        this.turbX = (Math.random() - 0.5) * 0.15;
-        this.turbY = (Math.random() - 0.5) * 0.10;
+    for (let cy = 0; cy < sh; cy += CELL) {
+      for (let cx = 0; cx < sw; cx += CELL) {
+        const cellW = Math.min(CELL, sw - cx);
+        const cellH = Math.min(CELL, sh - cy);
 
-        this.rotation      = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.2;
-
-        this.alpha = Math.random() * 0.6 + 0.4;
-        
-        // Decay rate (lifespan) - fade slightly faster
-        this.decay = Math.random() * 0.01 + 0.005;
-
-        // 75% dark tinted dust, 25% glowing colored embers
-        if (Math.random() < 0.75) {
-          // Tinted dark dust based on the tab's stone color
-          const tintR = Math.floor(rgb.r * 0.4 + Math.random() * 20 - 10);
-          const tintG = Math.floor(rgb.g * 0.4 + Math.random() * 20 - 10);
-          const tintB = Math.floor(rgb.b * 0.4 + Math.random() * 20 - 10);
-          this.color = `rgba(${Math.max(0, Math.min(255, tintR))},${Math.max(0, Math.min(255, tintG))},${Math.max(0, Math.min(255, tintB))},${this.alpha})`;
-          this.isAsh = true;
-        } else {
-          this.color = variant(this.alpha);
-          this.isAsh = false;
-        }
-
-        this.done = false;
-      }
-
-      update(now) {
-        // Wind vector field (turbulence)
-        // Multi-frequency sine waves based on time and space to simulate swirling gusts
-        const timeScale = now * 0.0015;
-        const windScale = 0.004;
-        const windX = Math.sin(this.y * windScale + timeScale + this.rotation) * 0.15;
-        const windY = Math.cos(this.x * windScale - timeScale) * 0.10;
-
-        this.vx += windX + this.turbX;
-        this.vy += windY + this.turbY;
-
-        // Damping/air resistance
-        this.vx *= 0.98;
-        this.vy *= 0.98;
-
-        // Apply a gentle leftward draft (since wave moves left-to-right, dust blows back)
-        this.vx -= 0.02;
-        // Upward float
-        this.vy -= 0.02;
-
-        this.x += this.vx;
-        this.y += this.vy;
-
-        this.rotation += this.rotationSpeed;
-        this.alpha    -= this.decay;
-        this.size     *= 0.98; // shrink slightly to look like vanishing dust
-
-        if (
-          this.alpha <= 0 ||
-          this.size <= 0.1 ||
-          this.y < -50 || this.x < -50 ||
-          this.x > width + 50 || this.y > height + 50
-        ) {
-          this.done = true;
-        }
-      }
-
-      draw() {
-        if (this.alpha <= 0 || this.size <= 0.1) return;
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-
-        if (this.isAsh) {
-          // Flat colored dark ash/dust particle
-          ctx.fillStyle = this.color;
-          if (this.shape === 0) {
-            ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
-          } else if (this.shape === 1) {
-            // Draw a tiny triangle instead of a circle for sharper dust
-            ctx.beginPath();
-            ctx.moveTo(0, -this.size / 2);
-            ctx.lineTo(this.size / 2, this.size / 2);
-            ctx.lineTo(-this.size / 2, this.size / 2);
-            ctx.closePath();
-            ctx.fill();
-          } else {
-            // Diamond
-            ctx.beginPath();
-            ctx.moveTo(0, -this.size * 0.65);
-            ctx.lineTo(this.size * 0.45, 0);
-            ctx.lineTo(0, this.size * 0.65);
-            ctx.lineTo(-this.size * 0.45, 0);
-            ctx.closePath();
-            ctx.fill();
+        // Sample average colour + alpha
+        let rS = 0, gS = 0, bS = 0, aSum = 0, cnt = 0;
+        for (let dy = 0; dy < cellH; dy++) {
+          for (let dx = 0; dx < cellW; dx++) {
+            const i = ((cy + dy) * sw + (cx + dx)) * 4;
+            rS += px[i]; gS += px[i + 1]; bS += px[i + 2];
+            aSum += px[i + 3];
+            cnt++;
           }
-        } else {
-          // Glowing embers: Draw sharp tiny embers instead of large soft bubbles
-          ctx.globalCompositeOperation = "screen";
-
-          // Just a single small solid core with slightly colored tint
-          ctx.fillStyle = this.color;
-          ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
-
-          ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-          ctx.fillRect(-this.size * 0.3, -this.size * 0.3, this.size * 0.6, this.size * 0.6);
         }
 
-        ctx.restore();
+        const avgA = aSum / cnt;
+        const avgR = rS / cnt;
+        const avgG = gS / cnt;
+        const avgB = bS / cnt;
+
+        // Skip transparent cells
+        if (avgA < 8) continue;
+
+        // Skip white/bright background artifact cells
+        if (avgR > 230 && avgG > 230 && avgB > 230 && avgA > 180) continue;
+
+        // Screen position — mapped through captureRect
+        const screenX = offX + cx * scX;
+        const screenY = offY + cy * scY;
+        const screenW = cellW * scX;
+        const screenH = cellH * scY;
+
+        // Skip cells entirely off-screen
+        if (screenY + screenH < -10 || screenY > H + 10) continue;
+        if (screenX + screenW < -10 || screenX > W + 10) continue;
+
+        const nx = cx / sw, ny = cy / sh;
+
+        // Organic break time via fractal noise
+        const n1 = fbm(nx * 4.5 + seed, ny * 4.5 + seed, 4);
+        const n2 = fbm(nx * 10 + seed + 3.7, ny * 10 + seed + 3.7, 3);
+        const n3 = fbm(nx * 20 + seed + 7.1, ny * 20 + seed + 7.1, 2);
+
+        const breakTime = DURATION * (
+          0.28 * n1 +
+          0.22 * n2 +
+          0.12 * n3 +
+          0.18 * Math.random() +
+          0.05
+        );
+
+        // Sample pixel colours
+        const colors = [];
+        for (let s = 0; s < 5; s++) {
+          const dx = Math.floor(Math.random() * cellW);
+          const dy = Math.floor(Math.random() * cellH);
+          const i = ((cy + dy) * sw + (cx + dx)) * 4;
+          if (px[i + 3] > 8) {
+            colors.push({ r: px[i], g: px[i + 1], b: px[i + 2], a: px[i + 3] / 255 });
+          }
+        }
+        if (!colors.length) {
+          const i = (cy * sw + cx) * 4;
+          colors.push({ r: px[i], g: px[i + 1], b: px[i + 2], a: Math.max(0.1, px[i + 3] / 255) });
+        }
+
+        cells.push({
+          sx: cx, sy: cy, sw: cellW, sh: cellH,
+          x: screenX, y: screenY, w: screenW, h: screenH,
+          colors, breakTime, broken: false,
+        });
       }
     }
 
-    const WAVE_DURATION = 1100; // 1100ms dissolve
-    const TRAIL_EXTRA   = 800;  // Extra time for remaining dust to fade
-    const startTime     = performance.now();
-    const particles     = [];
-    let animationId;
-    const pageEl = pageRef?.current ?? null;
-
-    // Define wavefront coordinate wiggling function
-    const getWavefrontX = (y, elapsed) => {
-      const baseProgress = Math.min(1, elapsed / WAVE_DURATION);
-      const baseWaveFront = baseProgress * (width + 160) - 80;
-      
-      // Jagged wave offset based on Y-coordinate and time
-      const wiggle = Math.sin(y * 0.005 + elapsed * 0.001) * 45 + 
-                     Math.sin(y * 0.02) * 15;
-      
-      return baseWaveFront + wiggle;
-    };
+    /* ══════════════ ANIMATION LOOP ══════════════ */
+    const t0 = performance.now();
+    let animId;
+    let firstDrawDone = false;
 
     const animate = (now) => {
-      const elapsed  = now - startTime;
-      const progress = Math.min(1, elapsed / WAVE_DURATION);
+      const elapsed = now - t0;
+      ctx.clearRect(0, 0, W, H);
 
-      // Update the CSS mask-image custom property on the page element
-      if (pageEl && elapsed < WAVE_DURATION + 50) {
-        const pct = -15 + progress * 130;
-        pageEl.style.setProperty("--dissolve-pct", `${pct.toFixed(1)}%`);
-      }
+      /* ── Process cells ── */
+      for (let i = 0; i < cells.length; i++) {
+        const c = cells[i];
 
-      ctx.clearRect(0, 0, width, height);
+        // Break cell → spawn dust
+        if (!c.broken && elapsed >= c.breakTime) {
+          c.broken = true;
 
-      // Spawn particles along the jagged vertical wavefront
-      if (elapsed < WAVE_DURATION + 50) {
-        const BAND = 45;
-        const DENSITY = 250; // INCREASED DENSITY for thicker dust cloud
-        for (let i = 0; i < DENSITY; i++) {
-          const py = Math.random() * height;
-          const wX = getWavefrontX(py, elapsed);
-          
-          // Spawn slightly clustered around and behind the wiggling wavefront
-          const px = wX - Math.pow(Math.random(), 1.5) * BAND;
+          // Mix of chunk and fine-dust particles
+          const numP = 4 + Math.floor(Math.random() * 4);
+          for (let p = 0; p < numP; p++) {
+            const col = c.colors[Math.floor(Math.random() * c.colors.length)];
+            const isChunk = p < 2;
 
-          if (px >= 0 && px <= width) {
-            particles.push(new Particle(px, py));
+            const size = isChunk
+              ? c.w * (0.35 + Math.random() * 0.5)
+              : c.w * (0.1 + Math.random() * 0.3);
+
+            const angle = Math.PI * 0.82 + (Math.random() - 0.5) * Math.PI * 0.7;
+            const speed = isChunk
+              ? Math.random() * 2.0 + 1.0
+              : Math.random() * 3.5 + 1.5;
+
+            particles.push({
+              x: c.x + Math.random() * c.w,
+              y: c.y + Math.random() * c.h,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed - (Math.random() * 1.0 + 0.3),
+              r: col.r, g: col.g, b: col.b,
+              size,
+              alpha: col.a * (0.55 + Math.random() * 0.45),
+              decay: isChunk
+                ? 0.002 + Math.random() * 0.003
+                : 0.001 + Math.random() * 0.003,
+              rotation: Math.random() * Math.PI * 2,
+              rotSpd: (Math.random() - 0.5) * 0.18,
+              shape: Math.floor(Math.random() * 4),
+              turbX: (Math.random() - 0.5) * 0.1,
+              turbY: (Math.random() - 0.5) * 0.07,
+            });
+          }
+
+          // Lingering haze — tiny, long-lasting
+          if (Math.random() < 0.35) {
+            const col = c.colors[0];
+            particles.push({
+              x: c.x + c.w * 0.5,
+              y: c.y + c.h * 0.5,
+              vx: (Math.random() - 0.6) * 0.8,
+              vy: -(Math.random() * 0.5 + 0.2),
+              r: col.r, g: col.g, b: col.b,
+              size: c.w * 0.06,
+              alpha: 0.12 + Math.random() * 0.12,
+              decay: 0.0004 + Math.random() * 0.0008,
+              rotation: 0, rotSpd: 0,
+              shape: 0,
+              turbX: (Math.random() - 0.5) * 0.04,
+              turbY: (Math.random() - 0.5) * 0.03,
+            });
           }
         }
 
-        // A cloud of extremely fine micro-dust trailing behind to give a powdery vanishing effect
-        for (let i = 0; i < 200; i++) {
-          if (Math.random() < 0.9) {
-            const py = Math.random() * height;
-            const wX = getWavefrontX(py, elapsed);
-            const tx = wX - Math.random() * 300; // Wide trail
-            if (tx >= 0 && tx <= width) {
-              const tp = new Particle(tx, py);
-              tp.decay *= 0.3; // linger much longer in the air (slower fade)
-              tp.size  = Math.random() * 3.5 + 1.0; // Slightly larger for better visibility
-              tp.alpha = Math.random() * 0.6 + 0.3; // Higher opacity to be more visible
-              
-              // Bright fine dust matching the tab's stone color
-              const v = Math.floor(Math.random() * 60 - 30);
-              const r = Math.min(255, Math.max(0, rgb.r + v + 20));
-              const g = Math.min(255, Math.max(0, rgb.g + v + 20));
-              const b = Math.min(255, Math.max(0, rgb.b + v + 20));
-              tp.color = `rgba(${r},${g},${b},${tp.alpha})`;
-              tp.isAsh = true;
-              tp.shape = 0; // simple squares for tiny dust to render fast
-              
-              // More turbulent wind for fine dust
-              tp.turbX *= 2.5;
-              tp.turbY *= 2.5;
-              
-              particles.push(tp);
-            }
+        /* ── Draw unbroken cells at their correct screen position ── */
+        if (!c.broken) {
+          const untilBreak = c.breakTime - elapsed;
+
+          if (untilBreak < 300 && untilBreak > 0) {
+            // Crumbling edge — jitter + fade before shattering
+            const t = 1 - untilBreak / 300;
+            ctx.globalAlpha = 1 - t * 0.5;
+            const jx = Math.sin(now * 0.012 + c.sx * 0.7) * t * 2.5;
+            const jy = Math.cos(now * 0.014 + c.sy * 0.7) * t * 2.5;
+            // Pad width/height slightly to avoid sub-pixel grid seams
+            ctx.drawImage(snapshot, c.sx, c.sy, c.sw, c.sh, c.x + jx, c.y + jy, c.w + 0.5, c.h + 0.5);
+            ctx.globalAlpha = 1;
+          } else {
+            // Pad width/height slightly to avoid sub-pixel grid seams
+            ctx.drawImage(snapshot, c.sx, c.sy, c.sw, c.sh, c.x, c.y, c.w + 0.5, c.h + 0.5);
           }
         }
       }
 
-      // Update & draw active particles
+      /* ── First frame drawn → tell App.jsx to hide DOM ── */
+      if (!firstDrawDone) {
+        firstDrawDone = true;
+        if (onFirstDraw) onFirstDraw();
+      }
+
+      /* ── Update & draw particles ── */
       let anyAlive = false;
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
-        p.update(now);
-        p.draw();
-        if (p.done) {
+        const t = now * 0.001;
+
+        // Wind turbulence
+        p.vx += Math.sin(p.y * 0.005 + t * 1.1) * 0.055 + p.turbX;
+        p.vy += Math.cos(p.x * 0.004 - t * 0.8) * 0.04 + p.turbY;
+
+        // Air resistance
+        p.vx *= 0.983;
+        p.vy *= 0.983;
+
+        // Wind: leftward + upward
+        p.vx -= 0.016;
+        p.vy -= 0.01;
+
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rotation += p.rotSpd;
+        p.alpha -= p.decay;
+        p.size *= 0.994;
+
+        if (p.alpha <= 0 || p.size < 0.1 ||
+            p.x < -200 || p.x > W + 200 ||
+            p.y < -200 || p.y > H + 200) {
           particles.splice(i, 1);
-        } else {
-          anyAlive = true;
+          continue;
         }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = `rgb(${p.r},${p.g},${p.b})`;
+
+        const s = p.size;
+        switch (p.shape) {
+          case 0:
+            ctx.fillRect(-s / 2, -s / 2, s, s);
+            break;
+          case 1:
+            ctx.beginPath();
+            ctx.moveTo(0, -s / 2);
+            ctx.lineTo(s / 2, s / 2);
+            ctx.lineTo(-s / 2, s / 2);
+            ctx.closePath();
+            ctx.fill();
+            break;
+          case 2:
+            ctx.beginPath();
+            ctx.moveTo(0, -s * 0.6);
+            ctx.lineTo(s * 0.4, 0);
+            ctx.lineTo(0, s * 0.6);
+            ctx.lineTo(-s * 0.4, 0);
+            ctx.closePath();
+            ctx.fill();
+            break;
+          default:
+            ctx.beginPath();
+            ctx.moveTo(-s * 0.3, -s * 0.5);
+            ctx.lineTo(s * 0.45, -s * 0.2);
+            ctx.lineTo(s * 0.25, s * 0.45);
+            ctx.lineTo(-s * 0.4, s * 0.25);
+            ctx.closePath();
+            ctx.fill();
+        }
+        ctx.restore();
+        anyAlive = true;
       }
 
-      if (anyAlive || elapsed < WAVE_DURATION + TRAIL_EXTRA) {
-        animationId = requestAnimationFrame(animate);
-      } else if (pageEl) {
-        pageEl.style.removeProperty("--dissolve-pct");
+      const anySolid = cells.some((c) => !c.broken);
+      if (anyAlive || anySolid || elapsed < DURATION + TRAIL) {
+        animId = requestAnimationFrame(animate);
       }
     };
 
-    animationId = requestAnimationFrame(animate);
+    animId = requestAnimationFrame(animate);
 
     return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", handleResize);
-      if (pageEl) pageEl.style.removeProperty("--dissolve-pct");
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", onResize);
     };
-  }, [color, pageRef]);
+  }, [phase, snapshot, captureRect, onFirstDraw]);
+
+  if (phase !== "dissolve") return null;
 
   return (
     <canvas
