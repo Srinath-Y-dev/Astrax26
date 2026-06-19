@@ -136,7 +136,11 @@
 
 /* Custom Image Stones */
 .nav-item.time::before,
-.nav-item.power::before {
+.nav-item.power::before,
+.nav-item.reality::before,
+.nav-item.soul::before,
+.nav-item.mind::before,
+.nav-item.space::before {
   display: none;
 }
 

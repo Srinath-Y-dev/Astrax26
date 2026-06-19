@@ -2,6 +2,10 @@ import { useState } from "react";
 import navLogo from "../assets/nav-logo.png";
 import tImg from "../assets/t.png";
 import pImg from "../assets/p.png";
+import rImg from "../assets/r.png";
+import sImg from "../assets/s.png";
+import mImg from "../assets/m.png";
+import spImg from "../assets/sp.png";
 import "../styles/Navbar.css";
 
 // src/components/Navbar.jsx
@@ -41,10 +45,22 @@ function Navbar({ activeTab, onTabChange }) {
           <img src={tImg} alt="Time" className="nav-stone-img" />
           Events
         </li>
-        <li className={`nav-item reality ${activeTab === "About Us" ? "active-stone" : ""}`} onClick={() => handleTabClick("About Us")}>About Us</li>
-        <li className={`nav-item soul ${activeTab === "Workshops" ? "active-stone" : ""}`} onClick={() => handleTabClick("Workshops")}>Workshops</li>
-        <li className={`nav-item mind ${activeTab === "Gallery" ? "active-stone" : ""}`} onClick={() => handleTabClick("Gallery")}>Gallery</li>
-        <li className={`nav-item space ${activeTab === "Sponsors" ? "active-stone" : ""}`} onClick={() => handleTabClick("Sponsors")}>Sponsors</li>
+        <li className={`nav-item reality ${activeTab === "About Us" ? "active-stone" : ""}`} onClick={() => handleTabClick("About Us")}>
+          <img src={rImg} alt="Reality" className="nav-stone-img" />
+          About Us
+        </li>
+        <li className={`nav-item soul ${activeTab === "Workshops" ? "active-stone" : ""}`} onClick={() => handleTabClick("Workshops")}>
+          <img src={sImg} alt="Soul" className="nav-stone-img" />
+          Workshops
+        </li>
+        <li className={`nav-item mind ${activeTab === "Gallery" ? "active-stone" : ""}`} onClick={() => handleTabClick("Gallery")}>
+          <img src={mImg} alt="Mind" className="nav-stone-img" style={{ width: "50px", height: "50px", margin: "0 -12px" }} />
+          Gallery
+        </li>
+        <li className={`nav-item space ${activeTab === "Sponsors" ? "active-stone" : ""}`} onClick={() => handleTabClick("Sponsors")}>
+          <img src={spImg} alt="Space" className="nav-stone-img" style={{ width: "50px", height: "50px", margin: "0 -12px" }} />
+          Sponsors
+        </li>
         <li className="nav-mobile-register">
           <button className="register-btn mobile-reg-btn">
             Register Now
