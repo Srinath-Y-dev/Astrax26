@@ -8,9 +8,11 @@
   min-height: 100vh;
   width: 100%;
   color: white;
-  overflow: hidden;
   background-color: #050505;
   font-family: 'Inter', sans-serif;
+  z-index: 10;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .gallery-bg {
@@ -61,6 +63,7 @@
   margin: 0;
   background: linear-gradient(180deg, #fff 0%, #b3b3b3 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-transform: uppercase;
 }
@@ -403,6 +406,7 @@
   align-items: center;
   z-index: 10;
   padding-top: 0;
+  padding-bottom: 15vh; /* Ensure there is room at bottom */
 }
 
 .gallery-main-title-img {
@@ -444,9 +448,21 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.6;
-  transition: opacity 0.4s, transform 0.8s ease-out;
+  transition: opacity 200ms ease-in-out, transform 0.8s ease-out;
   cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.portal-content img.active-image {
+  opacity: 0.6;
+  pointer-events: auto;
+}
+
+.portal-content img.inactive-image {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Positioning the images exactly behind the transparent windows using clip-path */
@@ -462,7 +478,7 @@
   transform: scale(1.0);
 }
 
-.portal-left:hover img {
+.portal-left:hover img.active-image {
   opacity: 1;
   transform: scale(1.1);
 }
@@ -478,7 +494,7 @@
   transform: scale(1.0);
 }
 
-.portal-center:hover img {
+.portal-center:hover img.active-image {
   opacity: 1;
   transform: scale(1.1);
 }
@@ -495,9 +511,47 @@
   transform: scale(1.0);
 }
 
-.portal-right:hover img {
+.portal-right:hover img.active-image {
   opacity: 1;
   transform: scale(1.1);
+}
+
+/* --- BUTTONS --- */
+.gallery-controls {
+  position: absolute;
+  top: 85%; /* Moved up to avoid scrolling */
+  margin-top: 0; /* Removed margin to save vertical space */
+  left: 0;
+  width: 100%;
+  z-index: 20;
+}
+
+.gallery-control-item {
+  position: absolute;
+  transform: translateX(-50%);
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rune-btn {
+  /* Use the exact image as uploaded, no CSS redesign */
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+  width: 50px; /* appropriately sized so it fits the screen */
+  height: auto;
+  filter: brightness(0.6); /* Dimmed default brightness */
+  border-radius: 50%; /* Rounds the edges to fit the circular structure */
+}
+
+.rune-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.0); /* Brightens back on hover */
+}
+
+.rune-btn:active {
+  transform: scale(0.95);
 }
 
 @keyframes floatPortals {
