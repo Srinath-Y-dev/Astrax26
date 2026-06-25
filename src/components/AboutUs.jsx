@@ -34,38 +34,44 @@ const aboutSections = [
   }
 ];
 
-function AboutPhoto({ label, image, imageFit }) {
+function AboutPhoto({ label, image, imageFit, variants }) {
   return (
-    <div className="about-photo-placeholder" aria-label={label}>
+    <motion.div className="about-photo-placeholder" aria-label={label} variants={variants}>
       <img 
         src={image} 
         alt={label} 
         className={`about-photo-image ${imageFit === "contain" ? "fit-contain" : "fit-cover"}`} 
       />
-    </div>
+    </motion.div>
   );
 }
 
 function AboutSection({ section }) {
-  const media = <AboutPhoto label={section.mediaLabel} image={section.mediaImage} imageFit={section.imageFit} />;
+  const mediaVariants = section.layout === "media-left" 
+    ? { hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } } }
+    : { hidden: { opacity: 0, x: 40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } } };
+
+  const media = <AboutPhoto label={section.mediaLabel} image={section.mediaImage} imageFit={section.imageFit} variants={mediaVariants} />;
 
   return (
     <motion.article 
       className={`about-story-card ${section.layout}`}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.6 }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, margin: "-100px" }}
     >
       {section.layout === "media-left" && media}
 
-      <div className="about-story-copy">
+      <motion.div 
+        className="about-story-copy"
+        variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.2, ease: "easeOut" } } }}
+      >
         <span className="about-card-badge">{section.eyebrow}</span>
         <h3>{section.title}</h3>
         {section.body.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
-      </div>
+      </motion.div>
 
       {section.layout === "media-right" && media}
     </motion.article>
@@ -84,15 +90,31 @@ function AboutUs() {
       <div className="about-glow about-glow-2"></div>
 
       <div className="about-container">
-        <header className="about-hero">
-          <span className="about-hero-kicker">Department of CSE (AI & ML)</span>
-          <h2>About Us</h2>
-          <p>
+        <motion.header 
+          className="about-hero"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-50px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
+          }}
+        >
+          <motion.span 
+            className="about-hero-kicker"
+            variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
+            Department of CSE (AI & ML)
+          </motion.span>
+          <motion.h2 variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.7, ease: "easeOut" } } }}>
+            About Us
+          </motion.h2>
+          <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}>
             ATHERA connects technical curiosity, institutional excellence, and
             visionary leadership into a space for students to build, research,
             compete, and collaborate.
-          </p>
-        </header>
+          </motion.p>
+        </motion.header>
 
         <div className="about-stories">
           {aboutSections.map((section) => (
@@ -102,15 +124,20 @@ function AboutUs() {
 
         <motion.article 
           className="about-chairman-card"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-100px" }}
         >
-          <div className="chairman-signal">
+          <motion.div 
+            className="chairman-signal"
+            variants={{ hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } } }}
+          >
             <img src={chairmanImg} alt="Shri. P. Sriram" className="chairman-photo" />
-          </div>
-          <div className="chairman-content">
+          </motion.div>
+          <motion.div 
+            className="chairman-content"
+            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.2, ease: "easeOut" } } }}
+          >
             <span className="about-card-badge">About Chairman</span>
             <h3>Shri. P. Sriram</h3>
             <p>
@@ -121,7 +148,7 @@ function AboutUs() {
               role in establishing CIT as one of Tamil Nadu's leading engineering
               institutions.
             </p>
-          </div>
+          </motion.div>
         </motion.article>
       </div>
     </section>
