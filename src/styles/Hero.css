@@ -13,6 +13,7 @@
   position: relative;
   overflow: hidden;
   gap: 0;
+  font-family: var(--font-rajdhani);
 }
 
 /* AMBIENT FLOATING ORBS */
@@ -96,7 +97,7 @@
 
 .hero-tagline {
   margin-top: 18px;
-  font-family: var(--font-cinzel);
+  font-family: var(--font-rajdhani);
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 12px;
@@ -201,7 +202,7 @@
 }
 
 .stone-label {
-  font-family: var(--font-cinzel);
+  font-family: var(--font-rajdhani);
   font-size: 0.65rem;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -231,7 +232,7 @@
 
 .hero-buttons button {
   padding: 14px 38px;
-  font-family: var(--font-cinzel);
+  font-family: var(--font-rajdhani);
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 3px;

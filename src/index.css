@@ -18,6 +18,7 @@
   --font-orbitron: 'Orbitron', sans-serif;
   --font-cinzel: 'Cinzel Decorative', serif;
   --font-montserrat: 'Montserrat', sans-serif;
+  --font-rajdhani: 'Rajdhani', sans-serif;
   
   --transition-fast: 0.2s ease;
   --transition-med: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -73,4 +74,4 @@ body, .app, * {
   100% {
     background-position: 100% 100%;
   }
-}
+}

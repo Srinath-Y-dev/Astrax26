@@ -1,111 +1,128 @@
 import aboutVideo from "../assets/about-bg.mp4";
+import chairmanImg from "../assets/chairman_img.jpg";
+import citImage from "../assets/CIT_image.png";
+import clubImg from "../assets/club_img.jpeg";
+import { motion } from "framer-motion";
 import "../styles/AboutUs.css";
 
-function AboutUs({ setActivePage }) {
-  const missionPoints = [
-    "To create next generation leaders by effective teaching learning methodologies and instill scientific spark in them to meet the global challenges.",
-    "To transform lives through deployment of emerging technology, novelty and sustainability.",
-    "To inculcate human values and ethical principles to cater to the societal needs.",
-    "To contribute towards the research ecosystem by providing a suitable, effective platform for interaction between industry, academia and R & D establishments.",
-    "To nurture incubation centers enabling structured entrepreneurship and start-ups."
-  ];
+const aboutSections = [
+  {
+    eyebrow: "About College",
+    title: "Chennai Institute of Technology",
+    mediaLabel: "College Photo",
+    mediaImage: citImage,
+    layout: "media-left",
+    imageFit: "cover",
+    body: [
+      "Chennai Institute of Technology (CIT Chennai) is an industry-connected autonomous institute and a co-educational engineering college located in Kundrathur, Chennai, Tamil Nadu, India.",
+      "Established in 2010 by the Parthasarathy Seeniammal Educational Trust, Chennai Institute of Technology is one of the top colleges in Tamil Nadu with an objective of providing quality technical education with adequate industrial exposure than any other college in Chennai.",
+      "Its vision is to be an eminent centre for Academia, Industry and Research by imparting knowledge, relevant practices and inculcating human values to address global challenges through novelty and sustainability."
+    ]
+  },
+  {
+    eyebrow: "About Athera Club",
+    title: "ATHERA",
+    mediaLabel: "Athera Club Photo",
+    mediaImage: clubImg,
+    layout: "media-right",
+    imageFit: "contain",
+    body: [
+      "ATHERA is a specialized technical club under the Department of CSE (AI & ML) at Chennai Institute of Technology.",
+      "The club focuses on emerging areas such as AI agent development, Large Language Models (LLMs), intelligent automation, and advanced ML techniques.",
+      "ATHERA bridges academia and industry through hands-on workshops, hackathons, research initiatives, and collaborative projects."
+    ]
+  }
+];
+
+function AboutPhoto({ label, image, imageFit }) {
+  return (
+    <div className="about-photo-placeholder" aria-label={label}>
+      <img 
+        src={image} 
+        alt={label} 
+        className={`about-photo-image ${imageFit === "contain" ? "fit-contain" : "fit-cover"}`} 
+      />
+    </div>
+  );
+}
+
+function AboutSection({ section }) {
+  const media = <AboutPhoto label={section.mediaLabel} image={section.mediaImage} imageFit={section.imageFit} />;
 
   return (
+    <motion.article 
+      className={`about-story-card ${section.layout}`}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.6 }}
+    >
+      {section.layout === "media-left" && media}
+
+      <div className="about-story-copy">
+        <span className="about-card-badge">{section.eyebrow}</span>
+        <h3>{section.title}</h3>
+        {section.body.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </div>
+
+      {section.layout === "media-right" && media}
+    </motion.article>
+  );
+}
+
+function AboutUs() {
+  return (
     <section className="about-section">
-      {/* Background Video Layer */}
       <video autoPlay muted loop playsInline className="about-video-bg">
         <source src={aboutVideo} type="video/mp4" />
       </video>
       <div className="about-video-overlay"></div>
 
-      {/* Red ambient background glows */}
       <div className="about-glow about-glow-1"></div>
       <div className="about-glow about-glow-2"></div>
 
       <div className="about-container">
-        {/* Header Bar */}
-        <div className="about-header-bar">
-          <h2 className="about-page-title">ABOUT US</h2>
+        <header className="about-hero">
+          <span className="about-hero-kicker">Department of CSE (AI & ML)</span>
+          <h2>About Us</h2>
+          <p>
+            ATHERA connects technical curiosity, institutional excellence, and
+            visionary leadership into a space for students to build, research,
+            compete, and collaborate.
+          </p>
+        </header>
+
+        <div className="about-stories">
+          {aboutSections.map((section) => (
+            <AboutSection key={section.eyebrow} section={section} />
+          ))}
         </div>
 
-        {/* Main Grid Content */}
-        <div className="about-grid">
-          {/* Card 1: About CIT */}
-          <div className="about-card cit-card">
-            <div className="card-corners">
-              <span className="corner top-left"></span>
-              <span className="corner top-right"></span>
-              <span className="corner bottom-left"></span>
-              <span className="corner bottom-right"></span>
-            </div>
-            <div className="card-badge red-badge">INSTITUTION</div>
-            <h3 className="card-title">Chennai Institute of Technology</h3>
-            <p className="card-text">
-              Chennai Institute of Technology is a leading institution dedicated to academic excellence, 
-              innovation, and research. The institute provides a dynamic learning environment that 
-              fosters technical expertise, creativity, and professional growth. 
-            </p>
-            <p className="card-text text-secondary">
-              With a strong focus on industry-oriented education and holistic development, CIT empowers 
-              students to become skilled engineers, innovators, and responsible leaders who contribute 
-              to society and technological advancement.
-            </p>
-            <div className="cit-stats">
-              <div className="stat-item">
-                <span className="stat-value">A++</span>
-                <span className="stat-label">NAAC Grade</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-value">Top 100</span>
-                <span className="stat-label">NIRF Ranking</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-value">100%</span>
-                <span className="stat-label">Innovation Focused</span>
-              </div>
-            </div>
+        <motion.article 
+          className="about-chairman-card"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="chairman-signal">
+            <img src={chairmanImg} alt="Shri. P. Sriram" className="chairman-photo" />
           </div>
-
-          {/* Column 2: Vision & Mission */}
-          <div className="about-side-column">
-            {/* Card 2: Vision */}
-            <div className="about-card vision-card">
-              <div className="card-corners">
-                <span className="corner top-left"></span>
-                <span className="corner top-right"></span>
-                <span className="corner bottom-left"></span>
-                <span className="corner bottom-right"></span>
-              </div>
-              <div className="card-badge red-badge">VISION</div>
-              <h3 className="card-title">Our Vision</h3>
-              <p className="vision-quote">
-                “To be an eminent centre for Academia, Industry and Research by imparting knowledge, 
-                relevant practices and inculcating human values to address global challenges through 
-                novelty and sustainability.”
-              </p>
-            </div>
-
-            {/* Card 3: Mission */}
-            <div className="about-card mission-card">
-              <div className="card-corners">
-                <span className="corner top-left"></span>
-                <span className="corner top-right"></span>
-                <span className="corner bottom-left"></span>
-                <span className="corner bottom-right"></span>
-              </div>
-              <div className="card-badge red-badge">MISSION</div>
-              <h3 className="card-title">Our Mission</h3>
-              <ul className="mission-list">
-                {missionPoints.map((point, index) => (
-                  <li key={index} className="mission-item">
-                    <div className="mission-number">0{index + 1}</div>
-                    <p className="mission-text">{point}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="chairman-content">
+            <span className="about-card-badge">About Chairman</span>
+            <h3>Shri. P. Sriram</h3>
+            <p>
+              Shri. P. Sriram, Chairman of Chennai Institute of Technology, is a
+              visionary entrepreneur and educationist dedicated to transforming
+              technical education. His leadership and commitment to innovation,
+              industry collaboration, and student success have played a pivotal
+              role in establishing CIT as one of Tamil Nadu's leading engineering
+              institutions.
+            </p>
           </div>
-        </div>
+        </motion.article>
       </div>
     </section>
   );
