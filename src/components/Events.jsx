@@ -16,13 +16,13 @@ import eyeOpen from "../assets/eye_open.png";
 import eyeClose from "../assets/eye_close.png";
 
 const eventDatabase = [
-  { id: "debate",    badge: "Tech Saga",            title: "AI Technical Debate", image: eventDebate,    prize: "₹40,000",   participants: "200+", description: "An intense battle of minds pitching human logic against artificial intelligence algorithms." },
-  { id: "tva",       badge: "Quest Saga",            title: "TVA: Variant Hunt",   image: eventTva,       prize: "₹60,000",   participants: "500+", description: "A high-speed multiverse treasure hunt across complex temporal nodes." },
-  { id: "technova",  badge: "Innovation Challenge",  title: "Technova",            image: eventTechnova,  prize: "₹80,000",   participants: "350+", description: "A design and prototyping challenge aimed at bringing innovative tech solutions to life." },
-  { id: "neural",    badge: "Tech Saga",             title: "Neural Knockout",     image: eventNeural,    prize: "₹50,000",   participants: "300+", description: "A deep learning battle arena where custom neural network models will compete." },
-  { id: "pixel",     badge: "Design Saga",           title: "Pixel Whisper",       image: eventPixel,     prize: "₹45,000",   participants: "250+", description: "Where design parameters are generated purely by vocal commands." },
-  { id: "nexus",     badge: "Quest Saga",            title: "Nexus Grid",          image: eventNexus,     prize: "₹35,000",   participants: "400+", description: "A high-speed cyber bingo event designed to test algorithmic speed and basic tech trivia." },
-  { id: "ideathon",  badge: "Flagship Saga",         title: "Ideathon",            image: eventIdeathon,  prize: "₹1,00,000", participants: "600+", description: "The crowning flagship event of Astra-X. Pitch revolutionary product concepts." },
+  { id: "debate",    badge: "Tech Saga",            title: "AI Technical Debate", image: eventDebate,    prize: "₹5,000",   participants: "200+", description: "An intense battle of minds pitching human logic against artificial intelligence algorithms." },
+  { id: "tva",       badge: "Quest Saga",            title: "TVA: Variant Hunt",   image: eventTva,       prize: "₹5,000",   participants: "500+", description: "A high-speed multiverse treasure hunt across complex temporal nodes." },
+  { id: "technova",  badge: "Innovation Challenge",  title: "Technova",            image: eventTechnova,  prize: "₹5,000",   participants: "350+", description: "A design and prototyping challenge aimed at bringing innovative tech solutions to life." },
+  { id: "neural",    badge: "Tech Saga",             title: "Neural Knockout",     image: eventNeural,    prize: "₹5,000",   participants: "300+", description: "A deep learning battle arena where custom neural network models will compete." },
+  { id: "pixel",     badge: "Design Saga",           title: "Pixel Whisper",       image: eventPixel,     prize: "₹5,000",   participants: "250+", description: "Where design parameters are generated purely by vocal commands." },
+  { id: "nexus",     badge: "Quest Saga",            title: "Nexus Grid",          image: eventNexus,     prize: "₹5,000",   participants: "400+", description: "A high-speed cyber bingo event designed to test algorithmic speed and basic tech trivia." },
+  { id: "ideathon",  badge: "Flagship Saga",         title: "Ideathon",            image: eventIdeathon,  prize: "₹5,000", participants: "600+", description: "The crowning flagship event of Astra-X. Pitch revolutionary product concepts." },
 ];
 
 const PARTICLE_COUNT = 28;
@@ -526,7 +526,7 @@ function Events() {
               { target: 3000,   label: "Expected Heroes" },
               { target: 500,    label: "Projects to Deploy" },
               { target: 7,      label: "Upcoming Sagas" },
-              { target: 500000, label: "Prizes to Win (₹)" },
+              { target: 35000, label: "Prizes to Win (₹)" },
             ].map((stat, i) => (
               <div key={i} className="stat-card">
                 <div className="stat-number" data-target={stat.target} ref={el => numbersRef.current[i] = el}>0</div>
