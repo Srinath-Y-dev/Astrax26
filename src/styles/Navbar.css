@@ -96,7 +96,7 @@
 .nav-item {
   color: var(--marvel-white);
   position: relative;
-  font-family: var(--font-bankgothic);
+  font-family: var(--font-cinzel);
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 2px;
@@ -211,7 +211,7 @@
   background: var(--theme-gold-gradient);
   border: 1px solid transparent;
   color: var(--marvel-black);
-  font-family: var(--font-bankgothic);
+  font-family: var(--font-cinzel);
   font-size: 0.95rem;
   letter-spacing: 2px;
   font-weight: 700;
