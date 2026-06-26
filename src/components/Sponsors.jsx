@@ -1,27 +1,27 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/Sponsors.css';
 
 // Background Video
-import sponsersBg from '../assets/sponsers-bg.mp4';
+import sponsersBg from '../assets/sponsers.mp4';
 
 // Demo Sponsor Icons
 import { FaGoogle, FaMicrosoft, FaAws, FaReact } from 'react-icons/fa';
 import { SiNvidia, SiOpenai, SiIntel, SiAmd, SiTesla, SiMeta, SiGooglecloud, SiCisco } from 'react-icons/si';
 
 const demoSponsors = [
-  { id: 1, name: 'TechNova', Icon: SiNvidia, tier: 'INNOVATE. INSPIRE. IMPACT.' },
-  { id: 2, name: 'QuantumStack', Icon: SiOpenai, tier: 'TITLE SPONSOR' },
-  { id: 3, name: 'DevForge', Icon: FaMicrosoft, tier: 'TITLE SPONSOR' },
-  { id: 4, name: 'CodeCraft', Icon: SiIntel, tier: 'POWER SPONSOR' },
-  { id: 5, name: 'DataFlux', Icon: FaGoogle, tier: 'POWER SPONSOR' },
-  { id: 6, name: 'ApexLabs', Icon: FaAws, tier: 'POWER SPONSOR' },
-  { id: 7, name: 'SynthNet', Icon: SiAmd, tier: 'TECH PARTNER' },
-  { id: 8, name: 'CyberCore', Icon: SiTesla, tier: 'TECH PARTNER' },
-  { id: 9, name: 'NexusAI', Icon: SiMeta, tier: 'CRITICAL HUB' },
-  { id: 10, name: 'CloudVibe', Icon: SiGooglecloud, tier: 'CLOUD PARTNER' },
-  { id: 11, name: 'Crypton', Icon: SiCisco, tier: 'SECURITY LEADER' },
-  { id: 12, name: 'Vertex', Icon: FaReact, tier: 'DATA EXPERT' }
+  { id: 1, name: 'Nvidia', Icon: SiNvidia, tier: 'AI & GRAPHICS PARTNER' },
+  { id: 2, name: 'OpenAI', Icon: SiOpenai, tier: 'TITLE SPONSOR' },
+  { id: 3, name: 'Microsoft', Icon: FaMicrosoft, tier: 'TITLE SPONSOR' },
+  { id: 4, name: 'Intel', Icon: SiIntel, tier: 'POWER SPONSOR' },
+  { id: 5, name: 'Google', Icon: FaGoogle, tier: 'POWER SPONSOR' },
+  { id: 6, name: 'AWS', Icon: FaAws, tier: 'POWER SPONSOR' },
+  { id: 7, name: 'AMD', Icon: SiAmd, tier: 'TECH PARTNER' },
+  { id: 8, name: 'Tesla', Icon: SiTesla, tier: 'TECH PARTNER' },
+  { id: 9, name: 'Meta', Icon: SiMeta, tier: 'INNOVATION PARTNER' },
+  { id: 10, name: 'Google Cloud', Icon: SiGooglecloud, tier: 'CLOUD PARTNER' },
+  { id: 11, name: 'Cisco', Icon: SiCisco, tier: 'NETWORKING PARTNER' },
+  { id: 12, name: 'React', Icon: FaReact, tier: 'FRONTEND PARTNER' }
 ];
 
 // Helper to avoid hook purity issues (deterministic pseudo-random generator)
@@ -75,6 +75,29 @@ const getCardStyle = (index, activeIndex, totalCards) => {
 const Sponsors = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const N = demoSponsors.length;
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const playVideo = () => {
+      video.play().catch(err => console.log("Video autoPlay prevented:", err));
+    };
+
+    playVideo();
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        playVideo();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
 
   const rotateRight = () => setActiveIndex((prev) => (prev + 1) % N);
   const rotateLeft = () => setActiveIndex((prev) => (prev - 1 + N) % N);
@@ -93,45 +116,40 @@ const Sponsors = () => {
   return (
     <div className="sponsors-page">
       {/* Background Video */}
-      <video autoPlay muted loop playsInline className="sponsors-bg-video">
+      <video 
+        ref={videoRef}
+        autoPlay 
+        muted 
+        loop 
+        playsInline 
+        preload="auto" 
+        className="sponsors-bg-video"
+        onEnded={() => {
+          if (videoRef.current) {
+            videoRef.current.currentTime = 0;
+            videoRef.current.play().catch(err => console.log("Video manual loop failed:", err));
+          }
+        }}
+      >
         <source src={sponsersBg} type="video/mp4" />
       </video>
-      <div className="sponsors-overlay"></div>
-      <div className="scan-lines"></div>
 
-      {/* Floating Particles */}
-      <div className="particles-layer" aria-hidden="true">
-        {INITIAL_PARTICLES.map((p) => (
-          <span key={p.id} className="particle" style={{
-            left: p.left,
-            animationDelay: p.animationDelay,
-            animationDuration: p.animationDuration,
-            '--max-opacity': p.maxOpacity,
-            '--drift': p.drift
-          }}></span>
-        ))}
-      </div>
-
-      {/* Main Split Layout */}
-      <main className="sponsors-main-content">
-        
-        {/* Left Text Panel */}
-        <section className="sponsors-left-panel">
-          <div className="sponsors-tagline">TOGETHER, WE BUILD THE EXTRAORDINARY</div>
-          <h1 className="sponsors-title">OUR<br/>SPONSORS</h1>
-          <h2 className="sponsors-subtitle">OUR POWER. THEIR VISION.</h2>
-          <p className="sponsors-description">
-            Astra X 2026 is made possible by visionary partners who believe in innovation, creativity and the future.
-          </p>
-          <div className="status-indicator">
-            <span style={{ fontSize: '0.65rem' }}>PARTNERSHIP STATUS</span>
-            <div className="status-value">
-              <span className="status-dot"></span> ACTIVE
-            </div>
+      {/* Centered Sponsors Header */}
+      <header className="sponsors-header">
+        <div className="sponsors-tagline">TOGETHER, WE BUILD THE EXTRAORDINARY</div>
+        <h1 className="sponsors-title">OUR SPONSORS</h1>
+        <h2 className="sponsors-subtitle">OUR POWER. THEIR VISION.</h2>
+        <div className="status-indicator">
+          <span>PARTNERSHIP STATUS</span>
+          <div className="status-value">
+            <span className="status-dot"></span> ACTIVE
           </div>
-        </section>
+        </div>
+      </header>
 
-        {/* Right Carousel Panel */}
+      {/* Main Content Layout */}
+      <main className="sponsors-main-content">
+        {/* Carousel Panel */}
         <section className="sponsors-carousel-panel">
           <div className="carousel-viewport">
             {/* Left Nav Arrow */}
@@ -195,37 +213,7 @@ const Sponsors = () => {
         </section>
       </main>
 
-      {/* Bottom CTA Banner */}
-      <div className="sponsors-cta-banner">
-        {/* Left: 3D Cube */}
-        <div className="banner-cube-container">
-          <div className="cube-wrapper">
-            <div className="cube">
-              <div className="cube-face face-front"></div>
-              <div className="cube-face face-back"></div>
-              <div className="cube-face face-left"></div>
-              <div className="cube-face face-right"></div>
-              <div className="cube-face face-top"></div>
-              <div className="cube-face face-bottom"></div>
-            </div>
-          </div>
-          <div className="cube-status">
-            SYSTEM 
-            <span className="cube-status-val">ONLINE</span>
-          </div>
-        </div>
 
-        {/* Center: Call to Action Text */}
-        <div className="banner-center-text">
-          <h2 className="banner-title">BE PART OF THE LEGACY</h2>
-          <p className="banner-desc">Partner with Astra X 2026 and empower the next generation of innovators.</p>
-        </div>
-
-        {/* Right: Button */}
-        <button className="banner-cta-button">
-          Become a Sponsor <span style={{ fontSize: '1.2rem', marginLeft: '4px' }}>→</span>
-        </button>
-      </div>
 
     </div>
   );

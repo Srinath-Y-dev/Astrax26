@@ -27,8 +27,10 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  opacity: 0.35;
-  mix-blend-mode: screen;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .sponsors-overlay {
@@ -89,42 +91,24 @@
   }
 }
 
-/* ── Main Layout ── */
-.sponsors-main-content {
+/* ── Centered Sponsors Header ── */
+.sponsors-header {
   position: absolute;
-  top: 80px;
-  /* Below Navbar */
-  left: 0;
-  right: 0;
-  bottom: 120px;
-  /* Above Bottom Banner */
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  /* Prevent invisible flex space from blocking interactions */
-}
-
-.sponsors-main-content * {
-  pointer-events: auto;
-  /* Allow interactions on actual content */
-}
-
-/* ── Left panel text block ── */
-.sponsors-left-panel {
-  position: absolute;
-  left: 40px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: auto;
-  max-width: 320px;
+  top: 95px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  z-index: 10;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
   pointer-events: none;
-  /* Let clicks pass through to the nav arrows */
+}
+
+.sponsors-header * {
+  pointer-events: auto;
 }
 
 .sponsors-tagline {
@@ -133,16 +117,16 @@
   letter-spacing: 5px;
   font-size: 0.8rem;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
   font-weight: 500;
 }
 
 .sponsors-title {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.6rem;
+  font-size: 3rem;
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
   margin: 0;
   background: linear-gradient(180deg, #ffffff 0%, #a5f3fc 100%);
   -webkit-background-clip: text;
@@ -150,35 +134,28 @@
   filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.25));
   line-height: 1.1;
   text-transform: uppercase;
-  white-space: nowrap;
 }
 
 .sponsors-subtitle {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: #38bdf8;
-  margin: 10px 0 20px;
+  margin: 6px 0 12px;
   letter-spacing: 2px;
   font-weight: 600;
-}
-
-.sponsors-description {
-  font-size: 0.95rem;
-  color: #94a3b8;
-  line-height: 1.6;
-  margin-bottom: 30px;
-  max-width: 440px;
+  text-transform: uppercase;
 }
 
 /* Status Indicator */
 .status-indicator {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.8);
-  letter-spacing: 1px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .status-value {
@@ -186,8 +163,28 @@
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+/* ── Main Layout ── */
+.sponsors-main-content {
+  position: absolute;
+  top: 250px; /* Shifted down to accommodate top header */
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.sponsors-main-content * {
+  pointer-events: auto;
 }
 
 .status-dot {
@@ -213,10 +210,7 @@
 
 /* ── Carousel Panel (Center) ── */
 .sponsors-carousel-panel {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -254,7 +248,8 @@
   width: 250px;
   height: 330px;
   background: rgba(3, 15, 30, 0.5);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(0, 255, 255, 0.25);
   border-radius: 16px;
   padding: 24px;
@@ -527,7 +522,8 @@
   width: calc(100% - 80px);
   max-width: 1320px;
   background: rgba(6, 18, 36, 0.45);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(0, 255, 255, 0.2);
   border-radius: 12px;
   padding: 16px 40px;
@@ -691,11 +687,12 @@
 /* ── Responsive Styling ── */
 @media (max-width: 1200px) {
   .sponsors-title {
-    font-size: 3rem;
+    font-size: 2.6rem;
   }
 
   .sponsors-main-content {
-    padding: 90px 40px 0;
+    top: 240px;
+    padding: 0 40px;
   }
 
   .sponsor-3d-card {
@@ -718,60 +715,33 @@
   }
 }
 
-@media (max-width: 992px) {
-  .sponsors-main-content {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    overflow-y: auto;
-    height: calc(100vh - 150px);
-    padding-bottom: 120px;
-  }
-
-  .sponsors-left-panel {
-    flex: 0 0 auto;
-    text-align: center;
-    align-items: center;
-    margin-bottom: 40px;
-    width: 100%;
-  }
-
-  .sponsors-description {
-    max-width: 550px;
-  }
-
-  .status-indicator {
-    justify-content: center;
-  }
-
-  .sponsors-carousel-panel {
-    flex: 0 0 auto;
-    width: 100%;
-  }
-
-  .sponsors-cta-banner {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    transform: none;
-    width: calc(100% - 40px);
-    margin: 20px auto;
-  }
-}
-
 @media (max-width: 768px) {
   .sponsors-page {
     overflow-y: auto;
     height: auto;
   }
 
-  .sponsors-main-content {
-    height: auto;
-    padding: 90px 20px 20px;
+  .sponsors-header {
+    top: 90px;
+    padding: 0 20px;
   }
 
   .sponsors-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .sponsors-subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  .sponsors-main-content {
+    position: relative;
+    top: auto;
+    margin-top: 220px;
+    height: auto;
+    padding: 20px 10px 40px;
   }
 
   .sponsor-3d-card {
@@ -791,21 +761,5 @@
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
-  }
-
-  .sponsors-cta-banner {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-    padding: 20px;
-  }
-
-  .banner-cube-container {
-    justify-content: center;
-  }
-
-  .banner-cta-button {
-    width: 100%;
-    justify-content: center;
   }
 }
