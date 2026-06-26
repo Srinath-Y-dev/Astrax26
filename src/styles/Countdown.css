@@ -1,0 +1,106 @@
+.countdown {
+    display: flex;
+    gap: 16px;
+    margin-top: 15px;
+    justify-content: center;
+    align-items: center;
+    color: var(--marvel-white);
+    opacity: 0;
+    animation: fade-in var(--transition-slow) forwards 2.2s;
+}
+
+.countdown-card {
+    text-align: center;
+    background: none;
+    border: none;
+    border-top: none;
+    border-radius: 0;
+    padding: 4px 6px;
+    min-width: 70px;
+    backdrop-filter: none;
+    box-shadow: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: visible;
+    cursor: default;
+}
+
+.countdown-card:hover {
+    transform: translateY(-2px) scale(1.05);
+}
+
+.countdown h2 {
+    font-size: 2.2rem;
+    font-weight: 300;
+    font-family: var(--font-orbitron);
+    color: #ffffff; /* Clean white numbers */
+    line-height: 1.1;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 255, 255, 0.15);
+    margin-bottom: 4px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.countdown-card:hover h2 {
+    color: #ffffff;
+    text-shadow: 
+      0 0 12px rgba(255, 255, 255, 0.75),
+      0 0 24px rgba(255, 255, 255, 0.35);
+}
+
+.countdown span {
+    font-size: 0.6rem;
+    font-family: var(--font-orbitron);
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    color: #a0a5b5; /* Soft light silver-grey labels */
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.countdown-card:hover span {
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.countdown-separator {
+    font-size: 1.8rem;
+    font-family: var(--font-orbitron);
+    font-weight: 300;
+    color: #ffffff; /* White separator dots */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    animation: blink 1.5s infinite;
+    transform: translateY(-3px);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+}
+
+/* Responsive adjustment for mobile screen sizing */
+@media (max-width: 768px) {
+    .countdown {
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .countdown-card {
+        padding: 4px;
+        min-width: 60px;
+    }
+
+    .countdown h2 {
+        font-size: 1.8rem;
+    }
+
+    .countdown span {
+        font-size: 0.52rem;
+        letter-spacing: 1px;
+    }
+
+    .countdown-separator {
+        font-size: 1.4rem;
+        transform: translateY(-2px);
+    }
+}

@@ -1,0 +1,1496 @@
+.events-page-wrapper {
+    & {
+        --bg-dark: #040906;
+        --bg-card: rgba(18, 12, 4, 0.8);
+        --text-light: #f3f4f6;
+        --text-muted: #b0a090;
+        --marvel-gold: #e6b800;
+        --marvel-gold-glow: rgba(230, 184, 0, 0.5);
+        --portal-gold: #ffd050;
+        --portal-gold-glow: rgba(255, 208, 80, 0.5);
+        --font-heading: 'Cinzel', serif;
+        --font-body: 'Outfit', sans-serif;
+        --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+}
+
+/* ============================================================
+   Background
+   ============================================================ */
+.cosmic-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background-image: linear-gradient(rgba(5, 4, 2, 0.88), rgba(5, 4, 2, 0.88)),
+        url('../assets/events bg.jpeg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.cosmic-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(7, 8, 14, 0.42);
+    z-index: 1;
+}
+
+.nebula-red,
+.nebula-blue {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(160px);
+    opacity: 0.12;
+    mix-blend-mode: screen;
+    animation: orbit 50s linear infinite;
+    z-index: 2;
+}
+
+.nebula-red {
+    top: -15%;
+    right: -15%;
+    width: 55vw;
+    height: 55vw;
+    background: radial-gradient(circle, rgba(230, 184, 0, 0.9) 0%, transparent 70%);
+}
+
+.nebula-blue {
+    bottom: -15%;
+    left: -15%;
+    width: 45vw;
+    height: 45vw;
+    background: radial-gradient(circle, rgba(180, 100, 0, 0.8) 0%, transparent 70%);
+    animation-delay: -25s;
+}
+
+@keyframes orbit {
+    0% {
+        transform: rotate(0deg) translate(60px) rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg) translate(60px) rotate(-360deg);
+    }
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 900px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hero-title-container {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: drop-shadow(0 0 20px rgba(230, 184, 0, 0.4)) drop-shadow(0 0 45px rgba(200, 140, 0, 0.18));
+    animation: floatTitle 5s ease-in-out infinite;
+}
+
+.hero-title-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+@keyframes floatTitle {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 0 20px rgba(230, 184, 0, 0.4)) drop-shadow(0 0 45px rgba(200, 140, 0, 0.18));
+    }
+
+    50% {
+        transform: translateY(-12px) scale(1.015);
+        filter: drop-shadow(0 0 32px rgba(255, 210, 80, 0.6)) drop-shadow(0 0 65px rgba(230, 184, 0, 0.28));
+    }
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+}
+
+.hero-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.8rem;
+}
+
+.hero-divider .line {
+    height: 1px;
+    width: 130px;
+    background: linear-gradient(90deg, transparent, rgba(230, 184, 0, 0.75), transparent);
+}
+
+.eye-of-agamotto {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 12px rgba(230, 184, 0, 0.55));
+    animation: pulseEyeGlow 4s ease-in-out infinite alternate;
+}
+
+.eye-of-agamotto::before {
+    content: '';
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border: 1.2px dashed rgba(230, 184, 0, 0.45);
+    border-radius: 50%;
+    animation: spinRune 18s linear infinite;
+    z-index: -1;
+}
+
+.eye-of-agamotto::after {
+    content: '';
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    border: 1px solid rgba(255, 210, 80, 0.15);
+    border-radius: 50%;
+    animation: spinRune 28s linear infinite reverse;
+    z-index: -1;
+}
+
+@keyframes spinRune {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.doctor-strange-eye {
+    width: 70px;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(230, 184, 0, 0.4)) drop-shadow(0 0 18px rgba(200, 140, 0, 0.25));
+    transition: filter 0.4s ease;
+}
+
+.doctor-strange-eye:hover {
+    filter: drop-shadow(0 0 18px rgba(255, 210, 80, 0.9)) drop-shadow(0 0 36px rgba(230, 184, 0, 0.5));
+}
+
+@keyframes pulseEyeGlow {
+    0% {
+        filter: drop-shadow(0 0 8px rgba(230, 184, 0, 0.4));
+        transform: scale(0.97);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 20px rgba(255, 210, 80, 0.7));
+        transform: scale(1.01);
+    }
+
+    100% {
+        filter: drop-shadow(0 0 14px rgba(230, 184, 0, 0.55));
+        transform: scale(1.04);
+    }
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.7;
+    animation: bounce 2s infinite;
+}
+
+.scroll-indicator .mouse {
+    width: 24px;
+    height: 40px;
+    border: 2px solid var(--text-muted);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+}
+
+.scroll-indicator .wheel {
+    width: 4px;
+    height: 8px;
+    background-color: var(--marvel-red);
+    border-radius: 2px;
+    animation: scrollWheel 1.2s infinite;
+}
+
+.scroll-text {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+}
+
+@keyframes scrollWheel {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(12px);
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translate(-50%, 0);
+    }
+
+    40% {
+        transform: translate(-50%, -8px);
+    }
+
+    60% {
+        transform: translate(-50%, -4px);
+    }
+}
+
+/* ============================================================
+   Sections
+   ============================================================ */
+section {
+    position: relative;
+    padding: 5rem 2rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    z-index: 2;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    display: inline-block;
+    position: relative;
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(230, 184, 0, 0.08);
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--marvel-gold), transparent);
+    box-shadow: 0 0 12px var(--marvel-gold-glow);
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0.5rem auto 0;
+}
+
+/* ==========================================================================
+   Events Section — Eye of Agamotto
+   ========================================================================== */
+.events-section {
+    padding: 4rem 1.5rem 1.5rem;
+    position: relative;
+    z-index: 5;
+    background: linear-gradient(180deg,
+            transparent 0%,
+            rgba(230, 184, 0, 0.012) 50%,
+            transparent 100%);
+}
+
+/* Outer flex column */
+.agamotto-showcase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* ── Eye Wrapper ──
+   We make the wrapper background transparent and overflow visible so the 
+   eye of Agamotto floats naturally on the page background and its magic 
+   glowing rings are not clipped by circular borders.
+*/
+/* ── Eye Container (handles floating) ── */
+.agamotto-eye-container {
+    position: relative;
+    width: min(1100px, 96vw);
+    aspect-ratio: 3 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: floatEye 9s ease-in-out infinite;
+    overflow: visible;
+    z-index: 5;
+}
+
+/* ── Eye Wrapper (handles GSAP shaking and rotation) ── */
+.agamotto-eye-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 0;
+    overflow: visible;
+    will-change: transform;
+}
+
+@keyframes floatEye {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    30% {
+        transform: translateY(-12px) rotate(0.2deg);
+    }
+
+    60% {
+        transform: translateY(-18px) rotate(-0.1deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+/* Wrapper ::before / ::after are now removed since overflow:hidden clips them. */
+.agamotto-eye-wrapper::before,
+.agamotto-eye-wrapper::after {
+    display: none;
+}
+
+@keyframes auraBreath {
+    0% {
+        opacity: 0.5;
+        transform: scale(0.97);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.03);
+    }
+}
+
+/* Rune rings */
+.rune-ring {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform, opacity, filter;
+    transition: filter 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.rune-ring-1 {
+    width: 96%;
+    height: 96%;
+    border: 1.5px dashed rgba(230, 184, 0, 0.25);
+    filter: drop-shadow(0 0 6px rgba(230, 184, 0, 0.45));
+}
+
+.rune-ring-2 {
+    width: 82%;
+    height: 82%;
+    border: 1px dashed rgba(255, 210, 80, 0.18);
+    filter: drop-shadow(0 0 5px rgba(255, 210, 80, 0.35));
+}
+
+/* GPU hardware accelerated golden flare class */
+.rune-ring.flare {
+    filter: brightness(2.8) drop-shadow(0 0 20px rgba(255, 200, 0, 0.9)) drop-shadow(0 0 40px rgba(230, 184, 0, 0.6));
+}
+
+.rune-tick {
+    position: absolute;
+    width: 2px;
+    height: 12px;
+    background: rgba(230, 184, 0, 0.75);
+    border-radius: 1px;
+    transform-origin: center bottom;
+    top: 50%;
+    left: 50%;
+    margin-left: -1px;
+}
+
+.rune-diamond {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: rgba(255, 210, 80, 0.9);
+    transform-origin: center bottom;
+    top: 50%;
+    left: 50%;
+    margin-left: -3.5px;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    filter: drop-shadow(0 0 3px rgba(255, 210, 80, 0.7));
+}
+
+/* ── Inner stage ──
+   z-index: 3 — deliberately BELOW the eye frame images:
+     eye_open  = z:4
+     eye_close = z:5  (covers the inner stage when faded in = eye blinks shut)
+   The inner stage sits behind both eye images. When eye_close is faded in,
+   it physically covers the inner stage, hiding the image swap underneath.
+*/
+.agamotto-inner-stage {
+    position: absolute;
+    width: 46.5%;
+    height: 62%;
+    left: 27.75%;
+    top: 20.5%;
+    z-index: 3;
+    opacity: 1;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: transparent;
+    border: none;
+    box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.9),
+        0 0 0 2px rgba(230, 184, 0, 0.08);
+    transform-origin: center center;
+    will-change: transform;
+    isolation: isolate;
+}
+
+
+.agamotto-inner-stage:hover {
+    transform: scale(1.04);
+    box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.9),
+        0 0 0 2px rgba(230, 184, 0, 0.22),
+        0 0 20px rgba(230, 184, 0, 0.12);
+}
+
+.agamotto-inner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: inherit;
+    /* No CSS transition — GSAP fully controls opacity, scale, filter during eye blink */
+    filter: brightness(0.88) contrast(1.12) saturate(1.1);
+    will-change: transform, opacity, filter;
+}
+
+.agamotto-inner-stage:hover .agamotto-inner-img {
+    transform: scale(1.1);
+    filter: brightness(1.05) contrast(1.15) saturate(1.2);
+}
+
+/* ── Eye overlay images ──
+   Normal blend — no mix-blend-mode.
+   The wrapper's dark background covers the white PNG edges;
+   the eye frame itself is opaque metal that hides the inner stage edges.
+*/
+.agamotto-eye-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    transform-origin: center center;
+    will-change: opacity, transform;
+    /* No blend mode — white bg is hidden by the dark wrapper background */
+}
+
+/* Open image: shown by default — warm gold glow */
+.agamotto-open-img {
+    z-index: 4;
+    opacity: 1;
+    filter: drop-shadow(0 0 24px rgba(230, 184, 0, 0.6)) drop-shadow(0 0 60px rgba(200, 140, 0, 0.28));
+    /* No opacity animation here — GSAP controls opacity during blink transitions */
+    animation: eyeAuraGlow 5s ease-in-out infinite alternate;
+}
+
+@keyframes eyeAuraGlow {
+    0% {
+        filter: drop-shadow(0 0 18px rgba(230, 184, 0, 0.45)) drop-shadow(0 0 44px rgba(200, 140, 0, 0.2));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 34px rgba(255, 210, 80, 0.75)) drop-shadow(0 0 68px rgba(230, 184, 0, 0.32));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 24px rgba(230, 184, 0, 0.6)) drop-shadow(0 0 55px rgba(200, 140, 0, 0.25));
+    }
+}
+
+/* Close image: hidden by default, shown only during navigation transitions */
+.agamotto-close-img {
+    z-index: 5;
+    opacity: 0;
+    filter: drop-shadow(0 0 26px rgba(230, 184, 0, 0.5)) drop-shadow(0 0 10px rgba(255, 210, 80, 0.3));
+}
+
+/* ── Particles ── */
+.agamotto-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.agamotto-particle {
+    position: absolute;
+    width: var(--p-size, 6px);
+    height: var(--p-size, 6px);
+    border-radius: 50%;
+    background: hsl(calc(var(--p-hue, 45) * 1deg), 100%, 64%);
+    box-shadow: 0 0 8px 3px hsl(calc(var(--p-hue, 45) * 1deg), 100%, 60%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ── Gemstone Navigation buttons ──
+   Measured from the 1340x893 eye image:
+   Left gem center:  ~11% H, ~47% V  → button center at left:11%, top:50%
+   Right gem center: ~89% H, ~47% V  → button center at right:11%, top:50%
+   Each gem is about 7% wide and 10.5% tall
+*/
+.agamotto-gem-btn {
+    position: absolute;
+    width: 5.5%;
+    height: 8.25%;
+    top: 48.56%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 12;
+    background: transparent;
+    border: none;
+    outline: none;
+    /* Always-on green gem glow so users know these are buttons */
+    filter: drop-shadow(0 0 7px rgba(0, 255, 136, 0.75)) drop-shadow(0 0 14px rgba(0, 200, 100, 0.4));
+    animation: gemPulse 2.5s ease-in-out infinite;
+    transition: filter 0.2s ease, transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes gemPulse {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.65)) drop-shadow(0 0 12px rgba(0, 200, 100, 0.35));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 14px rgba(0, 255, 136, 1)) drop-shadow(0 0 28px rgba(0, 220, 110, 0.6));
+    }
+}
+
+.agamotto-gem-btn.prev {
+    left: 13.6%;
+}
+
+.agamotto-gem-btn.next {
+    left: 86.5%;
+}
+
+/* Always-visible spinning ring — no longer hidden by default */
+.agamotto-gem-btn::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(0, 220, 110, 0.55);
+    animation: spinRune 8s linear infinite;
+    opacity: 1;
+    transition: opacity 0.3s ease, border-color 0.3s ease;
+}
+
+.agamotto-gem-btn:hover::before {
+    border-color: rgba(0, 255, 136, 0.9);
+    opacity: 1;
+}
+
+.agamotto-gem-btn:hover {
+    filter: drop-shadow(0 0 18px rgba(0, 255, 136, 1)) drop-shadow(0 0 36px rgba(0, 200, 100, 0.7));
+    transform: translate(-50%, -50%) scale(1.2);
+    animation: none;
+}
+
+.agamotto-gem-btn:active {
+    transform: translate(-50%, -50%) scale(0.88);
+    filter: drop-shadow(0 0 22px rgba(0, 255, 136, 1));
+    transition-duration: 0.06s;
+}
+
+/* Label — always visible below each gem, pulses gently */
+.agamotto-gem-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(4, 9, 6, 0.82);
+    border: 1px solid rgba(0, 255, 136, 0.35);
+    color: #00ff88;
+    padding: 3px 10px;
+    font-size: 0.62rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    border-radius: 6px;
+    letter-spacing: 2px;
+    opacity: 1;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.2), 0 4px 12px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+    animation: labelPulse 2.5s ease-in-out infinite;
+    transition: all 0.25s ease;
+}
+
+@keyframes labelPulse {
+
+    0%,
+    100% {
+        opacity: 0.7;
+        text-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+        box-shadow: 0 0 8px rgba(0, 255, 136, 0.15), 0 4px 12px rgba(0, 0, 0, 0.7);
+    }
+
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 12px rgba(0, 255, 136, 0.9);
+        box-shadow: 0 0 16px rgba(0, 255, 136, 0.4), 0 4px 12px rgba(0, 0, 0, 0.7);
+    }
+}
+
+.agamotto-gem-btn:hover::after {
+    opacity: 1;
+    color: #fff;
+    border-color: rgba(0, 255, 136, 0.8);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5), 0 4px 12px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 1);
+    animation: none;
+}
+
+/* ── Inner stage light ray shimmer ── */
+.agamotto-inner-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(110deg,
+            transparent 20%,
+            rgba(255, 210, 80, 0.12) 48%,
+            rgba(255, 240, 150, 0.2) 50%,
+            rgba(255, 210, 80, 0.12) 52%,
+            transparent 80%);
+    background-size: 250% 100%;
+    animation: eyeShimmer 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes eyeShimmer {
+    0% {
+        background-position: 200% center;
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    50% {
+        background-position: -50% center;
+        opacity: 0.8;
+    }
+
+    75% {
+        opacity: 0;
+    }
+
+    100% {
+        background-position: 200% center;
+        opacity: 0;
+    }
+}
+
+/* ── Ambient golden breathing ring around eye center ── */
+.agamotto-inner-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid rgba(230, 184, 0, 0.15);
+    animation: innerRingBreathe 4s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 7;
+}
+
+@keyframes innerRingBreathe {
+    0% {
+        box-shadow: inset 0 0 8px 2px rgba(230, 184, 0, 0.15);
+        border-color: rgba(230, 184, 0, 0.12);
+    }
+
+    50% {
+        box-shadow: inset 0 0 18px 5px rgba(255, 210, 80, 0.28);
+        border-color: rgba(255, 210, 80, 0.25);
+    }
+
+    100% {
+        box-shadow: inset 0 0 10px 2px rgba(200, 140, 0, 0.18);
+        border-color: rgba(200, 140, 0, 0.15);
+    }
+}
+
+/* ── Ripple effect on click ── */
+@keyframes rippleOut {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(2.4);
+        opacity: 0;
+    }
+}
+
+/* ── Click Guide ── */
+.agamotto-click-guide {
+    text-align: center;
+    margin-top: -0.2rem;
+    margin-bottom: 0.35rem;
+    opacity: 1;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: translateY(0);
+}
+
+.agamotto-click-guide.info-open {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+}
+
+.guide-text {
+    font-size: 0.8rem;
+    color: #ffd250;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 600;
+    padding: 6px 18px;
+    background: rgba(0, 255, 136, 0.04);
+    border: 1px solid rgba(0, 255, 136, 0.15);
+    border-radius: 20px;
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    animation: pulseGuide 2.5s infinite ease-in-out;
+    text-shadow: 0 0 8px rgba(255, 210, 80, 0.2);
+}
+
+@keyframes pulseGuide {
+    0%, 100% {
+        opacity: 0.75;
+        border-color: rgba(0, 255, 136, 0.15);
+        background: rgba(0, 255, 136, 0.04);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+    50% {
+        opacity: 1;
+        border-color: rgba(0, 255, 136, 0.4);
+        background: rgba(0, 255, 136, 0.08);
+        box-shadow: 0 4px 15px rgba(0, 255, 136, 0.15);
+        color: #00ff88;
+        text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+    }
+}
+
+/* ── Dot indicators ── */
+.event-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(230, 184, 0, 0.08);
+}
+
+.event-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(230, 184, 0, 0.18);
+    border: 1px solid rgba(230, 184, 0, 0.35);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    padding: 0;
+}
+
+.event-dot.active {
+    background: #e6b800;
+    box-shadow: 0 0 12px rgba(230, 184, 0, 0.75), 0 0 24px rgba(230, 184, 0, 0.3);
+    transform: scale(1.35);
+}
+
+.event-dot:hover:not(.active) {
+    background: rgba(230, 184, 0, 0.5);
+    box-shadow: 0 0 7px rgba(230, 184, 0, 0.45);
+}
+
+/* ── Info card — overlays as a modal ── */
+.agamotto-info-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(850px, 96vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 40;
+    background: rgba(4, 9, 6, 0.92);
+    border: 2px solid rgba(0, 255, 136, 0.28);
+    border-radius: 30px 8px 30px 8px;
+    padding: 2.2rem 2.8rem;
+    text-align: left;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow:
+        0 30px 100px rgba(0, 0, 0, 0.95),
+        0 0 70px rgba(0, 255, 136, 0.15),
+        inset 0 1px 0 rgba(0, 255, 136, 0.1);
+    transition: box-shadow 0.4s ease, border-color 0.4s ease;
+    will-change: transform, opacity;
+}
+
+.agamotto-info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.65), transparent);
+}
+
+.agamotto-info-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.15), transparent);
+}
+
+.info-card-layout {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+.info-image-col {
+    flex: 0 0 35%;
+    border-radius: 20px 4px 20px 4px;
+    /* Asymmetrical matching crystal border radius */
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 255, 136, 0.15);
+    border: 1.5px solid rgba(0, 255, 136, 0.25);
+}
+
+.info-modal-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 3 / 4;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.info-image-col:hover .info-modal-image {
+    transform: scale(1.08) rotate(1deg);
+}
+
+.info-text-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-close-btn {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    transition: all 0.25s ease;
+    outline: none;
+    z-index: 10;
+}
+
+.info-close-btn:hover {
+    background: rgba(0, 255, 136, 0.15);
+    border-color: rgba(0, 255, 136, 0.45);
+    color: #00ff88;
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+}
+
+.info-badge {
+    display: inline-block;
+    background: rgba(0, 255, 136, 0.08);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.35);
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    align-self: flex-start;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+
+.info-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    color: #fff;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #ffffff 0%, #a3ffcc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.info-description {
+    color: #b3c7b9;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.info-meta {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2.5rem;
+    border-top: 1px solid rgba(0, 255, 136, 0.1);
+    padding-top: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.meta-divider {
+    width: 1px;
+    height: 35px;
+    background: rgba(0, 255, 136, 0.15);
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    align-items: flex-start;
+}
+
+.meta-label {
+    font-size: 0.7rem;
+    color: #8fa095;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.meta-value {
+    font-size: 1.3rem;
+    color: #00ff88;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.45);
+}
+
+/* CTA Button inside info card */
+.saga-cta-btn {
+    position: relative;
+    padding: 0.9rem 2.2rem;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 204, 102, 0.15) 100%);
+    border: 1.5px solid rgba(0, 255, 136, 0.5);
+    border-radius: 8px;
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    align-self: flex-start;
+    box-shadow: 0 4px 15px rgba(0, 255, 136, 0.15);
+}
+
+.saga-cta-btn span {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+.saga-cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.4s ease;
+}
+
+.saga-cta-btn:hover {
+    border-color: #00ff88;
+    box-shadow: 0 6px 25px rgba(0, 255, 136, 0.45), 0 0 35px rgba(0, 255, 136, 0.15);
+    transform: translateY(-2px);
+    color: #040906;
+}
+
+.saga-cta-btn:hover span {
+    text-shadow: none;
+}
+
+.saga-cta-btn:hover::before {
+    opacity: 1;
+}
+
+.saga-cta-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(0, 255, 136, 0.3);
+    transition-duration: 0.08s;
+}
+
+/* ============================================================
+   Timeline
+   ============================================================ */
+.timeline-section {
+    padding-bottom: 6rem;
+}
+
+.timeline-container {
+    position: relative;
+    max-width: 900px;
+    margin: 2rem auto 0;
+    padding: 2rem 0;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+
+.timeline-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: linear-gradient(180deg, var(--portal-cyan), var(--marvel-red), var(--marvel-gold));
+    box-shadow: 0 0 15px var(--marvel-red);
+    transition: height 0.1s ease-out;
+}
+
+.timeline-node {
+    position: relative;
+    width: 50%;
+    padding: 2rem 3.5rem;
+    margin-bottom: 2.5rem;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.timeline-node:nth-child(even) {
+    left: 0;
+    text-align: right;
+    transform: translateX(-40px);
+    opacity: 0;
+}
+
+.timeline-node:nth-child(odd) {
+    left: 50%;
+    text-align: left;
+    transform: translateX(40px);
+    opacity: 0;
+}
+
+.timeline-node.visible,
+.timeline-node.active-marker {
+    opacity: 1;
+}
+
+.timeline-node:nth-child(even).visible,
+.timeline-node:nth-child(even).active-marker {
+    transform: translateX(0);
+}
+
+.timeline-node:nth-child(odd).visible,
+.timeline-node:nth-child(odd).active-marker {
+    transform: translateX(0);
+}
+
+.timeline-content {
+    background: rgba(6, 12, 8, 0.94);
+    border: 1.2px solid rgba(0, 255, 136, 0.12);
+    border-radius: 14px;
+    padding: 1.8rem 2.2rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+    transition: all 0.4s ease;
+    display: inline-block;
+    max-width: 100%;
+    text-align: inherit;
+}
+
+.timeline-node.active-marker .timeline-content,
+.timeline-node.visible .timeline-content {
+    border-color: rgba(0, 255, 136, 0.6);
+    background: rgba(6, 12, 8, 0.97);
+    box-shadow: 0 12px 40px rgba(0, 255, 136, 0.12), inset 0 0 15px rgba(0, 255, 136, 0.04);
+}
+
+.timeline-marker {
+    position: absolute;
+    top: 2.5rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--bg-dark);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    z-index: 10;
+    transition: var(--transition-smooth);
+}
+
+.timeline-node:nth-child(even) .timeline-marker {
+    right: -8px;
+}
+
+.timeline-node:nth-child(odd) .timeline-marker {
+    left: -8px;
+}
+
+.timeline-node.active-marker .timeline-marker {
+    background-color: var(--marvel-red);
+    border-color: #fff;
+    box-shadow: 0 0 15px var(--marvel-red), 0 0 25px var(--marvel-red-glow);
+    transform: scale(1.3);
+}
+
+.timeline-node:nth-child(even).active-marker .timeline-marker {
+    border-color: var(--portal-cyan);
+    box-shadow: 0 0 15px var(--portal-cyan), 0 0 25px var(--portal-cyan-glow);
+}
+
+.timeline-year {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: rgba(230, 184, 0, 0.65);
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: all 0.4s ease;
+}
+
+.timeline-heading {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    color: rgba(243, 244, 246, 0.7);
+    transition: all 0.4s ease;
+}
+
+.timeline-body {
+    color: rgba(163, 184, 170, 0.7);
+    font-size: 0.95rem;
+    transition: all 0.4s ease;
+}
+
+.timeline-node.active-marker .timeline-year,
+.timeline-node.visible .timeline-year {
+    color: #e6b800;
+    text-shadow: 0 0 15px rgba(230, 184, 0, 0.8);
+}
+
+.timeline-node.active-marker .timeline-heading,
+.timeline-node.visible .timeline-heading {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+.timeline-node.active-marker .timeline-body,
+.timeline-node.visible .timeline-body {
+    color: #e2e8f0;
+}
+
+/* ============================================================
+   Achievements / Stats
+   ============================================================ */
+.achievements-section {
+    background: linear-gradient(180deg, transparent, rgba(230, 184, 0, 0.025) 50%, transparent);
+    padding: 6rem 2rem;
+}
+
+.achievements-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 3rem;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    border-radius: 12px;
+    background: rgba(18, 20, 32, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--marvel-red), var(--marvel-gold));
+}
+
+.stat-number {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1100px) {
+    .agamotto-eye-container {
+        width: min(860px, 96vw);
+    }
+
+    .agamotto-nav-btn {
+        width: 48px;
+        height: 48px;
+    }
+
+    .agamotto-nav-btn.prev {
+        left: 1rem;
+    }
+
+    .agamotto-nav-btn.next {
+        right: 1rem;
+    }
+
+    .info-card-layout {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .agamotto-eye-container {
+        width: 98vw;
+    }
+
+    .agamotto-nav-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .agamotto-nav-btn.prev {
+        left: 0.5rem;
+    }
+
+    .agamotto-nav-btn.next {
+        right: 0.5rem;
+    }
+
+    .nav-arrow {
+        font-size: 1.1rem;
+    }
+
+    .section-title {
+        font-size: 2.4rem;
+    }
+
+    .info-title {
+        font-size: 1.8rem;
+    }
+
+    .info-card-layout {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .info-image-col {
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    .agamotto-info-card {
+        padding: 1.8rem 1.5rem;
+    }
+
+    .info-meta {
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .meta-item {
+        align-items: center;
+    }
+}
+
+@media (max-width: 520px) {
+    .section-title {
+        font-size: 1.9rem;
+    }
+
+    .agamotto-nav-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .nav-arrow {
+        font-size: 1rem;
+    }
+
+    .info-title {
+        font-size: 1.5rem;
+    }
+
+    .info-image-col {
+        width: 80%;
+    }
+
+    .agamotto-info-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .info-meta {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .meta-divider {
+        width: 60px;
+        height: 1px;
+    }
+}

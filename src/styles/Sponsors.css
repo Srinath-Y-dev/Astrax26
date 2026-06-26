@@ -1,0 +1,765 @@
+/* ═══════════════════════════════════════════════
+   ASTRA X 2026 – Sponsors Dashboard Redesign
+   ═══════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ── Page Shell ── */
+.sponsors-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #020617;
+  /* Deep blue/black */
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Background Video & Overlays ── */
+.sponsors-bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.sponsors-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(2, 6, 23, 0.45) 0%, rgba(2, 6, 23, 0.9) 100%);
+  z-index: 1;
+}
+
+/* Scan-line effect */
+.scan-lines {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 255, 255, 0.02) 50%, rgba(0, 255, 255, 0.02));
+  background-size: 100% 4px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── Floating Particles ── */
+.particles-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  bottom: -20px;
+  width: 3px;
+  height: 3px;
+  background: #00ffff;
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 10px 2px rgba(0, 255, 255, 0.6);
+  animation: float-particle linear infinite;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: var(--max-opacity, 0.6);
+  }
+
+  80% {
+    opacity: var(--max-opacity, 0.6);
+  }
+
+  100% {
+    transform: translateY(-100vh) translateX(calc(-100px + 200px * var(--drift, 0.5))) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* ── Centered Sponsors Header ── */
+.sponsors-header {
+  position: absolute;
+  top: 95px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  pointer-events: none;
+}
+
+.sponsors-header * {
+  pointer-events: auto;
+}
+
+.sponsors-tagline {
+  font-family: 'Montserrat', sans-serif;
+  color: #00ffff;
+  letter-spacing: 5px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+.sponsors-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  margin: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #a5f3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.25));
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.sponsors-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  color: #38bdf8;
+  margin: 6px 0 12px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Status Indicator */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.status-value {
+  color: #00ffff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+/* ── Main Layout ── */
+.sponsors-main-content {
+  position: absolute;
+  top: 250px; /* Shifted down to accommodate top header */
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.sponsors-main-content * {
+  pointer-events: auto;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00ffff;
+  box-shadow: 0 0 10px #00ffff;
+  animation: pulse-dot 1.5s infinite alternate;
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+/* ── Carousel Panel (Center) ── */
+.sponsors-carousel-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* Perspective Wrapper */
+.carousel-viewport {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Carousel Container holding absolute cards */
+.carousel-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Interactive 3D Card ── */
+.sponsor-3d-card {
+  position: absolute;
+  width: 250px;
+  height: 330px;
+  background: rgba(3, 15, 30, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Outer neon border styling */
+.sponsor-3d-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.4) 0%, transparent 40%, transparent 60%, rgba(0, 255, 255, 0.4) 100%) border-box;
+  mask: linear-gradient(#fff 0 0) padding-box exclude, linear-gradient(#fff 0 0);
+  -webkit-mask: destination-out;
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+
+/* Card Glow when Active */
+.sponsor-3d-card.active-card {
+  border-color: rgba(0, 255, 255, 0.85);
+  box-shadow:
+    0 0 35px rgba(0, 255, 255, 0.3),
+    inset 0 0 20px rgba(0, 255, 255, 0.15);
+}
+
+.sponsor-3d-card.inactive-card {
+  opacity: 0.7;
+}
+
+/* Sci-fi tech styling inside card */
+.card-header-tech {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  color: rgba(0, 255, 255, 0.5);
+  letter-spacing: 1.5px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+  padding-bottom: 8px;
+}
+
+.card-icon-container {
+  font-size: 5rem;
+  color: #00ffff;
+  margin: 30px 0 10px;
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.45));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-body-tech {
+  text-align: center;
+  width: 100%;
+}
+
+.card-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 1.5px;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.card-tier {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #38bdf8;
+  letter-spacing: 1.5px;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+.card-footer-tech {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  color: rgba(56, 189, 248, 0.4);
+  border-top: 1px solid rgba(0, 255, 255, 0.1);
+  padding-top: 8px;
+  margin-top: 15px;
+}
+
+.card-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ffcc;
+  box-shadow: 0 0 8px #00ffcc;
+}
+
+/* ── Navigation Arrows ── */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(3, 15, 30, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 50%;
+  color: #00ffff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 30;
+  /* Elevated to ensure it's clickable */
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.nav-arrow:hover {
+  background: rgba(0, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  border-color: #00ffff;
+  color: white;
+}
+
+.nav-arrow.left {
+  left: calc(50% - 480px);
+}
+
+.nav-arrow.right {
+  right: calc(50% - 480px);
+}
+
+/* ── Projector Pedestal ── */
+.pedestal-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -10px;
+  position: relative;
+  z-index: 5;
+}
+
+.pedestal-base {
+  position: relative;
+  width: 380px;
+  height: 70px;
+  perspective: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pedestal-ring-1 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(0, 255, 255, 0.45);
+  border-radius: 50%;
+  transform: rotateX(80deg);
+  box-shadow:
+    0 0 30px rgba(0, 255, 255, 0.25),
+    inset 0 0 20px rgba(0, 255, 255, 0.15);
+  animation: spin-clockwise 15s linear infinite;
+}
+
+.pedestal-ring-2 {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border: 1px dashed rgba(0, 255, 255, 0.6);
+  border-radius: 50%;
+  transform: rotateX(80deg);
+  animation: spin-counter-clockwise 10s linear infinite;
+}
+
+.pedestal-core {
+  position: absolute;
+  width: 35%;
+  height: 35%;
+  background: radial-gradient(circle, #ffffff 10%, #00ffff 60%, transparent 100%);
+  border-radius: 50%;
+  transform: rotateX(80deg);
+  box-shadow: 0 0 40px #00ffff;
+  animation: pulse-core 2s ease-in-out infinite alternate;
+}
+
+/* ── Volumetric Light Beam ── */
+.volumetric-beam {
+  position: absolute;
+  bottom: 50px;
+  width: 440px;
+  height: 380px;
+  background: linear-gradient(to top, rgba(0, 255, 255, 0.16) 0%, rgba(0, 255, 255, 0.02) 65%, transparent 100%);
+  clip-path: polygon(18% 0%, 82% 0%, 100% 100%, 0% 100%);
+  pointer-events: none;
+  z-index: 1;
+  animation: beam-flicker 4s ease-in-out infinite alternate;
+}
+
+@keyframes spin-clockwise {
+  from {
+    transform: rotateX(80deg) rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateX(80deg) rotateZ(360deg);
+  }
+}
+
+@keyframes spin-counter-clockwise {
+  from {
+    transform: rotateX(80deg) rotateZ(360deg);
+  }
+
+  to {
+    transform: rotateX(80deg) rotateZ(0deg);
+  }
+}
+
+@keyframes pulse-core {
+  0% {
+    transform: rotateX(80deg) scale(0.9);
+    opacity: 0.75;
+  }
+
+  100% {
+    transform: rotateX(80deg) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes beam-flicker {
+  0% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+}
+
+/* ── Pedestal Label / Drag Instruction ── */
+
+/* ── Bottom CTA Banner ── */
+.sponsors-cta-banner {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 80px);
+  max-width: 1320px;
+  background: rgba(6, 18, 36, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 20;
+}
+
+/* Left part: 3D Holographic Cube */
+.banner-cube-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 0 0 auto;
+}
+
+.cube-wrapper {
+  width: 50px;
+  height: 50px;
+  perspective: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cube {
+  width: 26px;
+  height: 26px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotate-cube 8s linear infinite;
+}
+
+@keyframes rotate-cube {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+  }
+}
+
+.cube-face {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background: rgba(0, 255, 255, 0.08);
+  border: 1px solid rgba(0, 255, 255, 0.6);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.face-front {
+  transform: rotateY(0deg) translateZ(13px);
+}
+
+.face-back {
+  transform: rotateY(180deg) translateZ(13px);
+}
+
+.face-left {
+  transform: rotateY(-90deg) translateZ(13px);
+}
+
+.face-right {
+  transform: rotateY(90deg) translateZ(13px);
+}
+
+.face-top {
+  transform: rotateX(90deg) translateZ(13px);
+}
+
+.face-bottom {
+  transform: rotateX(-90deg) translateZ(13px);
+}
+
+.cube-status {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  color: rgba(56, 189, 248, 0.5);
+  letter-spacing: 1px;
+}
+
+.cube-status-val {
+  color: #00ffff;
+  font-weight: 600;
+  display: block;
+}
+
+/* Center part: BE PART OF THE LEGACY */
+.banner-center-text {
+  flex: 1;
+  text-align: center;
+}
+
+.banner-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+}
+
+.banner-desc {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 4px 0 0;
+}
+
+/* Right part: CTA Button */
+.banner-cta-button {
+  position: relative;
+  padding: 12px 28px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: rgba(0, 255, 255, 0.08);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.banner-cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #00ffff;
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.banner-cta-button:hover {
+  color: #020617;
+  border-color: #00ffff;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+}
+
+.banner-cta-button:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ── Responsive Styling ── */
+@media (max-width: 1200px) {
+  .sponsors-title {
+    font-size: 2.6rem;
+  }
+
+  .sponsors-main-content {
+    top: 240px;
+    padding: 0 40px;
+  }
+
+  .sponsor-3d-card {
+    width: 220px;
+    height: 290px;
+    padding: 18px;
+  }
+
+  .card-icon-container {
+    font-size: 4.2rem;
+    margin: 20px 0 5px;
+  }
+
+  .pedestal-base {
+    width: 320px;
+  }
+
+  .volumetric-beam {
+    width: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sponsors-page {
+    overflow-y: auto;
+    height: auto;
+  }
+
+  .sponsors-header {
+    top: 90px;
+    padding: 0 20px;
+  }
+
+  .sponsors-title {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .sponsors-subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  .sponsors-main-content {
+    position: relative;
+    top: auto;
+    margin-top: 220px;
+    height: auto;
+    padding: 20px 10px 40px;
+  }
+
+  .sponsor-3d-card {
+    width: 180px;
+    height: 250px;
+  }
+
+  .card-icon-container {
+    font-size: 3.5rem;
+  }
+
+  .card-name {
+    font-size: 1.2rem;
+  }
+
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}

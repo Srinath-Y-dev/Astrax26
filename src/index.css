@@ -1,0 +1,181 @@
+/* src/index.css */
+
+@font-face {
+  font-family: "Bank Gothic";
+  src: url("https://db.onlinewebfonts.com/t/5a3ec1660bea35534a58c047f797b1ec.eot");
+  src: url("https://db.onlinewebfonts.com/t/5a3ec1660bea35534a58c047f797b1ec.eot?#iefix") format("embedded-opentype"),
+       url("https://db.onlinewebfonts.com/t/5a3ec1660bea35534a58c047f797b1ec.woff2") format("woff2"),
+       url("https://db.onlinewebfonts.com/t/5a3ec1660bea35534a58c047f797b1ec.woff") format("woff"),
+       url("https://db.onlinewebfonts.com/t/5a3ec1660bea35534a58c047f797b1ec.ttf") format("truetype"),
+       url("https://db.onlinewebfonts.com/t/5a3ec1660bea35534a58c047f797b1ec.svg#BankGothic") format("svg");
+}
+
+@font-face {
+  font-family: "Avengeance Heroic Avenger";
+  src: url("https://db.onlinewebfonts.com/t/237b4961240efa84fa8d217b1e0089fb.eot");
+  src: url("https://db.onlinewebfonts.com/t/237b4961240efa84fa8d217b1e0089fb.eot?#iefix") format("embedded-opentype"), 
+       url("https://db.onlinewebfonts.com/t/237b4961240efa84fa8d217b1e0089fb.woff2") format("woff2"), 
+       url("https://db.onlinewebfonts.com/t/237b4961240efa84fa8d217b1e0089fb.woff") format("woff"), 
+       url("https://db.onlinewebfonts.com/t/237b4961240efa84fa8d217b1e0089fb.ttf") format("truetype"), 
+       url("https://db.onlinewebfonts.com/t/237b4961240efa84fa8d217b1e0089fb.svg#Avengeance Heroic Avenger") format("svg");
+}
+
+:root {
+  --theme-purple: #7038FF; /* Cosmic Royal Purple */
+  --theme-purple-glow: rgba(112, 56, 255, 0.5);
+  --theme-purple-dark: #4C1D95;
+  
+  --theme-gold: #DFB24F; /* Refined Metallic Gold */
+  --theme-gold-glow: rgba(223, 178, 79, 0.45);
+  --theme-gold-dark: #A37527;
+  --theme-gold-gradient: linear-gradient(135deg, #DFB24F 0%, #A37527 100%);
+  --theme-purple-gradient: linear-gradient(135deg, #7038FF 0%, #4C1D95 100%);
+  
+  --marvel-black: #080510; /* Obsidian violet-black */
+  --marvel-charcoal: #130E26; /* Dark slate-purple */
+  --marvel-white: #FFFFFF;
+  --font-bebas: 'Bebas Neue', sans-serif;
+  --font-orbitron: 'Orbitron', sans-serif;
+  --font-cinzel: 'Cinzel', serif;
+  --font-cinzel-dec: 'Cinzel Decorative', serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-rajdhani: 'Rajdhani', sans-serif;
+  --font-bankgothic: 'Bank Gothic', sans-serif;
+  --font-avengeance: 'Avengeance Heroic Avenger', sans-serif;
+  
+  --transition-fast: 0.2s ease;
+  --transition-med: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  --transition-slow: 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family: var(--font-montserrat);
+  background: radial-gradient(circle at center, #1E103C 0%, #080510 80%);
+  color: var(--marvel-white);
+  overflow-x:hidden;
+}
+
+html.home-active,
+body.home-active {
+  overflow: hidden !important;
+  height: 100vh !important;
+  position: fixed !important;
+  width: 100% !important;
+}
+
+/* HIDE SCROLLBARS GLOBALLY */
+::-webkit-scrollbar {
+  display: none;
+}
+
+body, .app, * {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* ANIMATIONS */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px var(--theme-purple-glow);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
+  }
+}
+
+@keyframes flipbook {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* LITE PERFORMANCE MODE OVERRIDES */
+body.low-perf {
+  background: #080510 !important;
+}
+
+body.low-perf,
+body.low-perf * {
+  /* Disable heavy backdrop blurs */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  
+  /* Disable box-shadows and text-shadows */
+  box-shadow: none !important;
+  text-shadow: none !important;
+  
+  /* Disable infinite animations to stop repaint loops */
+  animation-delay: 0s !important;
+  animation-duration: 0s !important;
+  animation-iteration-count: 1 !important;
+}
+
+/* Fallback opaque backgrounds for glassmorphic elements */
+body.low-perf .navbar {
+  background: rgba(8, 5, 16, 0.98) !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2) !important;
+}
+
+body.low-perf .event-card,
+body.low-perf .shield-dossier,
+body.low-perf .gallery-card,
+body.low-perf .sponsor-item,
+body.low-perf .workshop-card,
+body.low-perf .sponsor-3d-card {
+  background: #130e26 !important;
+  border: 1px solid rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Disable scroll-linked parallax-like or heavy filter effects */
+body.low-perf .cosmic-overlay,
+body.low-perf .about-video-overlay,
+body.low-perf .workshop-overlay-fixed {
+  background: rgba(8, 5, 16, 0.9) !important;
+}
+
+body.low-perf .about-glow,
+body.low-perf .nebula-red,
+body.low-perf .nebula-blue {
+  display: none !important;
+}
+
+/* Enable Hardware Acceleration for smooth rendering & scrolling */
+.navbar, 
+.hero-content, 
+.event-card, 
+.workshop-card, 
+.split-panel, 
+.gateway-door, 
+.portals-wrapper, 
+.countdown,
+.sponsor-card,
+.about-card,
+.sound-toggle,
+.rune-btn {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  will-change: transform;
+}
+

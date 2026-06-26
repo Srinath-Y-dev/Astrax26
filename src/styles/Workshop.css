@@ -1,0 +1,923 @@
+/* WORKSHOPS SECTION WRAPPER */
+
+.workshops-section {
+  width: 100%;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* 1. COLLAPSED / TEASER VIEW (FULL SCREEN) */
+
+.workshop-video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.teaser-back-to-home-btn {
+  position: absolute;
+  top: 25px;
+  left: 5%;
+  background: rgba(15, 16, 21, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-bankgothic);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  z-index: 12;
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.teaser-back-to-home-btn:hover {
+  border-color: #ff5a36;
+  color: #ff5a36;
+  box-shadow: 0 0 15px rgba(255, 90, 54, 0.4);
+  transform: translateX(-3px);
+}
+
+.workshop-overlay-fixed {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.85) 100%);
+  z-index: -1;
+}
+
+.workshop-teaser-fullscreen {
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  padding: 40px;
+}
+
+.workshop-teaser-fullscreen:hover {
+  transform: translateY(-5px);
+}
+
+.corners-decor-fullscreen {
+  position: absolute;
+  inset: 40px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.teaser-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 40px;
+}
+
+.teaser-tagline {
+  color: #ff5a36;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 6px;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(255, 90, 54, 0.5);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.teaser-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 4.5rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: white;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1), 0 0 40px rgba(255, 90, 54, 0.3);
+}
+
+.coming-soon-badge-container {
+  margin-top: 10px;
+  padding: 10px 30px;
+  background: rgba(255, 90, 54, 0.1);
+  border: 1px solid #ff5a36;
+  box-shadow: 0 0 15px rgba(255, 90, 54, 0.3);
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  animation: glowPulse 2s infinite alternate;
+}
+
+.coming-soon-badge {
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.teaser-hint {
+  color: #888;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  margin-top: 15px;
+  transition: color 0.3s;
+}
+
+.workshop-teaser-fullscreen:hover .teaser-hint {
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* 2. EXPANDED VIEW WITH SHANG-CHI SPLIT HOVER INTERACTION */
+
+.workshop-split-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50; /* Above backgrounds, below navbar */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+/* Fixed background image showing the characters in neutral state */
+.workshop-split-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/workshop_card.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
+/* Top control header bar */
+.split-header-bar {
+  position: absolute;
+  top: 30px; /* Positioned at the top since navbar is hidden */
+  left: 5%;
+  right: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99; /* Higher z-index to sit above overlays */
+  pointer-events: none; /* Let clicks pass through except on children */
+}
+
+.split-header-left {
+  display: flex;
+  gap: 15px;
+  pointer-events: auto; /* Enable clicks */
+}
+
+.back-to-teaser-btn {
+  background: rgba(15, 16, 21, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-bankgothic);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.back-to-teaser-btn:hover {
+  border-color: #ff5a36;
+  color: #ff5a36;
+  box-shadow: 0 0 15px rgba(255, 90, 54, 0.4);
+  transform: translateX(-3px);
+}
+
+.back-to-home-btn-split {
+  background: rgba(15, 16, 21, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-bankgothic);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.back-to-home-btn-split:hover {
+  border-color: #00bfff;
+  color: #00bfff;
+  box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.split-page-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 5px;
+  color: rgba(255, 255, 255, 0.5);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Flex panels grid */
+.split-panels {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  position: relative;
+}
+
+.split-panel {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent; /* Transparent so the fixed full-screen workshop-split-bg shows through */
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: width, opacity; /* Promote to GPU layout layering */
+  overflow: hidden;
+}
+
+.left-panel {
+  /* No border needed as we have the glowing divider */
+}
+
+.right-panel {
+  /* No border needed as we have the glowing divider */
+}
+
+/* Preloaded and cross-faded hover background images for GPU acceleration */
+.panel-bg-hover {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity; /* Promote to GPU opacity blending layer */
+}
+
+.left-hover-bg {
+  background-image: url('../assets/left-work.png');
+}
+
+.right-hover-bg {
+  background-image: url('../assets/right-work.png');
+}
+
+.split-panel.expanded .panel-bg-hover {
+  opacity: 1;
+}
+
+/* Hover expanded and shrunk states */
+.left-panel.expanded {
+  width: 100%;
+  z-index: 3; /* Lift above neutral background and overlays */
+}
+
+.right-panel.expanded {
+  width: 100%;
+  z-index: 3; /* Lift above neutral background and overlays */
+}
+
+.split-panel.shrunk {
+  width: 0%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Sci-fi Divider Line / Clashing Gap in the Middle */
+.split-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 14px;
+  background: #0f1015;
+  border-left: 2px solid #00bfff;
+  border-right: 2px solid #ff5a36;
+  box-shadow: 
+    -6px 0 15px rgba(0, 191, 255, 0.5), 
+    6px 0 15px rgba(255, 90, 54, 0.5),
+    inset 0 0 10px rgba(0, 0, 0, 0.8);
+  transform: translateX(-50%);
+  z-index: 5; /* Sit above the panels and overlays */
+  pointer-events: none; /* Let pointer pass through to avoid blocking panel hovers */
+  transition: left 0.7s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.7s;
+  will-change: left;
+}
+
+/* Divider position updates on hover */
+.split-divider.left {
+  left: 100%;
+  border-right-color: transparent;
+  box-shadow: -6px 0 15px rgba(0, 191, 255, 0.5);
+}
+
+.split-divider.right {
+  left: 0%;
+  border-left-color: transparent;
+  box-shadow: 6px 0 15px rgba(255, 90, 54, 0.5);
+}
+
+/* Colored visual overlays */
+.panel-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, background;
+}
+
+/* Blue overlay (Wenwu) */
+.blue-overlay {
+  background: linear-gradient(90deg, rgba(0, 15, 35, 0.75) 0%, rgba(0, 5, 15, 0.45) 100%);
+}
+
+.split-panel.left-panel.expanded .blue-overlay {
+  background: linear-gradient(90deg, rgba(0, 25, 55, 0.45) 0%, rgba(0, 8, 20, 0.1) 100%);
+}
+
+/* Orange overlay (Shang-Chi) */
+.orange-overlay {
+  background: linear-gradient(270deg, rgba(35, 8, 0, 0.75) 0%, rgba(15, 2, 0, 0.45) 100%);
+}
+
+.split-panel.right-panel.expanded .orange-overlay {
+  background: linear-gradient(270deg, rgba(50, 12, 0, 0.45) 0%, rgba(15, 3, 0, 0.1) 100%);
+}
+
+/* Shrunk overlay (dim unhovered side) */
+.split-panel.shrunk .panel-overlay {
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Content Layout */
+.panel-content {
+  position: relative;
+  z-index: 3;
+  padding: 60px 8%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.split-panel.shrunk .panel-content {
+  transform: scale(0.8);
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Spinning Glow Rings */
+.panel-glow-ring {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px dashed transparent;
+  margin-bottom: 25px;
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: width, height, box-shadow, border;
+  animation: spinRing 25s linear infinite;
+}
+
+.blue-ring {
+  border-color: rgba(0, 191, 255, 0.35);
+  box-shadow: 0 0 25px rgba(0, 191, 255, 0.15);
+}
+
+.orange-ring {
+  border-color: rgba(255, 90, 54, 0.35);
+  box-shadow: 0 0 25px rgba(255, 90, 54, 0.15);
+}
+
+/* Expanded Rings */
+.split-panel.expanded .panel-glow-ring {
+  width: 160px;
+  height: 160px;
+  border-style: solid;
+  margin-bottom: 30px;
+}
+
+.split-panel.expanded .blue-ring {
+  border-color: #00bfff;
+  box-shadow: 0 0 45px rgba(0, 191, 255, 0.85), inset 0 0 20px rgba(0, 191, 255, 0.35);
+}
+
+.split-panel.expanded .orange-ring {
+  border-color: #ff5a36;
+  box-shadow: 0 0 45px rgba(255, 90, 54, 0.85), inset 0 0 20px rgba(255, 90, 54, 0.35);
+}
+
+/* Text typography & styles */
+.panel-side-tag {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 5px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  transition: all 0.4s;
+}
+
+.left-panel .panel-side-tag {
+  color: rgba(0, 191, 255, 0.6);
+}
+
+.right-panel .panel-side-tag {
+  color: rgba(255, 90, 54, 0.6);
+}
+
+.split-panel.expanded.left-panel .panel-side-tag {
+  color: #00bfff;
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.6);
+}
+
+.split-panel.expanded.right-panel .panel-side-tag {
+  color: #ff5a36;
+  text-shadow: 0 0 10px rgba(255, 90, 54, 0.6);
+}
+
+.panel-workshop-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: white;
+  transition: all 0.4s;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
+}
+
+.split-panel.expanded.left-panel .panel-workshop-title {
+  text-shadow: 0 0 30px rgba(0, 191, 255, 0.9);
+}
+
+.split-panel.expanded.right-panel .panel-workshop-title {
+  text-shadow: 0 0 30px rgba(255, 90, 54, 0.9);
+}
+
+/* Workshop Details (Fades and Expands) */
+.panel-workshop-details {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.75s cubic-bezier(0.25, 1, 0.4, 1), opacity 0.5s ease;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.split-panel.expanded .panel-workshop-details {
+  max-height: 500px;
+  opacity: 1;
+  margin-top: 30px;
+}
+
+.panel-description {
+  color: #e2e8f0;
+  font-size: 1rem;
+  line-height: 1.65;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.panel-metadata {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+}
+
+.split-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(15, 16, 21, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.blue-tag {
+  border-color: rgba(0, 191, 255, 0.35);
+}
+
+.orange-tag {
+  border-color: rgba(255, 90, 54, 0.35);
+}
+
+.split-tag-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.blue-tag .split-tag-icon {
+  color: #00bfff;
+}
+
+.orange-tag .split-tag-icon {
+  color: #ff5a36;
+}
+
+/* Register Buttons */
+.register-now-split-btn {
+  padding: 14px 35px;
+  font-family: var(--font-bankgothic);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  color: white;
+  margin-top: 5px;
+}
+
+.blue-btn {
+  background: linear-gradient(135deg, #0066cc, #00bfff);
+}
+
+.blue-btn:hover {
+  box-shadow: 0 0 25px rgba(0, 191, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.orange-btn {
+  background: linear-gradient(135deg, #e63900, #ff5a36);
+}
+
+.orange-btn:hover {
+  box-shadow: 0 0 25px rgba(255, 90, 54, 0.8);
+  transform: translateY(-2px);
+}
+
+/* Hover Prompts */
+.hover-prompt {
+  margin-top: 35px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  padding: 10px 26px;
+  border: 1px solid transparent;
+  border-radius: 30px;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.4, 1);
+  background: rgba(15, 16, 21, 0.8);
+  text-transform: uppercase;
+}
+
+.blue-prompt {
+  color: rgba(0, 191, 255, 0.8);
+  border-color: rgba(0, 191, 255, 0.35);
+  box-shadow: 0 0 15px rgba(0, 191, 255, 0.15);
+}
+
+.orange-prompt {
+  color: rgba(255, 90, 54, 0.8);
+  border-color: rgba(255, 90, 54, 0.35);
+  box-shadow: 0 0 15px rgba(255, 90, 54, 0.15);
+}
+
+.split-panel:hover .hover-prompt {
+  background: white;
+  color: black;
+  box-shadow: 0 0 20px white;
+}
+
+.split-panel.expanded .hover-prompt {
+  opacity: 0;
+  transform: translateY(15px);
+  pointer-events: none;
+}
+
+/* Keyframes & Animations */
+
+@keyframes spinRing {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 15px rgba(255, 90, 54, 0.8);
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 8px rgba(255, 90, 54, 0.3);
+    border-color: rgba(255, 90, 54, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 90, 54, 0.6);
+    border-color: rgba(255, 90, 54, 1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Neutral State Workshop List styling */
+.neutral-workshop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 30px 0;
+  padding: 0;
+  list-style: none;
+  align-items: center;
+}
+
+.neutral-workshop-item {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.left-panel:hover .neutral-workshop-item {
+  color: rgba(0, 191, 255, 0.75);
+}
+
+.right-panel:hover .neutral-workshop-item {
+  color: rgba(255, 90, 54, 0.75);
+}
+
+/* Expanded Path Container */
+.expanded-path-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  padding: 140px 4% 40px;
+  box-sizing: border-box;
+}
+
+.blue-tag-text {
+  color: #00bfff;
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.6);
+}
+
+.orange-tag-text {
+  color: #ff5a36;
+  text-shadow: 0 0 10px rgba(255, 90, 54, 0.6);
+}
+
+/* 3-card Grid layout */
+.expanded-workshops-grid {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 25px;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+/* Sci-fi Glassmorphic Card styling */
+.workshop-card {
+  flex: 1;
+  max-width: 320px;
+  background: rgba(3, 10, 20, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-sizing: border-box;
+}
+
+.blue-card {
+  border-color: rgba(0, 191, 255, 0.25);
+  box-shadow: inset 0 0 15px rgba(0, 191, 255, 0.05);
+}
+
+.blue-card:hover {
+  border-color: #00bfff;
+  box-shadow: 0 0 25px rgba(0, 191, 255, 0.35), inset 0 0 15px rgba(0, 191, 255, 0.1);
+  transform: translateY(-5px);
+}
+
+.orange-card {
+  border-color: rgba(255, 90, 54, 0.25);
+  box-shadow: inset 0 0 15px rgba(255, 90, 54, 0.05);
+}
+
+.orange-card:hover {
+  border-color: #ff5a36;
+  box-shadow: 0 0 25px rgba(255, 90, 54, 0.35), inset 0 0 15px rgba(255, 90, 54, 0.1);
+  transform: translateY(-5px);
+}
+
+.card-ws-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 12px;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  line-height: 1.3;
+}
+
+.card-ws-desc {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card-ws-metadata {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-top: auto; /* Push metadata and button to bottom */
+}
+
+.card-ws-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  background: rgba(15, 16, 21, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+  font-size: 0.65rem;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+}
+
+.blue-card .card-ws-tag {
+  border-color: rgba(0, 191, 255, 0.25);
+}
+
+.orange-card .card-ws-tag {
+  border-color: rgba(255, 90, 54, 0.25);
+}
+
+.workshop-card .register-now-split-btn {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 0.8rem;
+  margin-top: 0;
+}
+
+/* 3. RESPONSIVE DESIGN */
+
+@media (max-width: 900px) {
+  .teaser-title {
+    font-size: 3.5rem;
+  }
+  .coming-soon-badge {
+    font-size: 1.2rem;
+  }
+  .panel-workshop-title {
+    font-size: 1.8rem;
+  }
+  .panel-description {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .workshop-split-container {
+    height: auto;
+    min-height: calc(100vh - 80px);
+  }
+  .split-panels {
+    flex-direction: column;
+    height: auto;
+  }
+  .split-panel {
+    height: 50vh;
+    min-height: 400px;
+    width: 100%;
+  }
+  .split-panel.expanded {
+    flex: none;
+    height: 75vh;
+  }
+  .split-panel.shrunk {
+    flex: none;
+    height: 25vh;
+  }
+  .split-header-bar {
+    top: 15px;
+  }
+  .split-page-title {
+    display: none;
+  }
+
+  .expanded-path-container {
+    padding: 80px 15px 20px;
+    height: 100%;
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+
+  .expanded-workshops-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .workshop-card {
+    width: 100%;
+    max-width: 320px;
+    flex: none;
+    padding: 16px;
+  }
+  
+  .card-ws-title {
+    font-size: 1.05rem;
+  }
+  
+  .card-ws-desc {
+    font-size: 0.75rem;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .teaser-title {
+    font-size: 2.2rem;
+  }
+  .coming-soon-badge {
+    font-size: 1rem;
+  }
+  .panel-workshop-title {
+    font-size: 1.5rem;
+  }
+}
