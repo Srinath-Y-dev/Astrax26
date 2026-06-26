@@ -12,8 +12,8 @@ import eventIdeathon from "../assets/event-ideathon.png";
 import bgVideo from "../assets/bg-video.mp4";
 import titleCard from "../assets/title card.png";
 import eyeOfAgamotto from "../assets/eye of agamotto.png";
-import agamottoOpen from "../assets/agamotto_open.png";
-import agamottoClose from "../assets/agamotto_close.png";
+import eyeOpen from "../assets/eye_open.png";
+import eyeClose from "../assets/eye_close.png";
 
 const eventDatabase = [
   { id: "debate",    badge: "Tech Saga",            title: "AI Technical Debate", image: eventDebate,    prize: "₹40,000",   participants: "200+", description: "An intense battle of minds pitching human logic against artificial intelligence algorithms." },
@@ -32,7 +32,7 @@ function Events() {
   const eyeWrapperRef   = useRef(null);
   const eyeOpenImgRef   = useRef(null);
   const eyeCloseImgRef  = useRef(null);
-  const eyeInnerImgRef  = useRef(null);
+  const stageRef        = useRef(null);
   const runeRing1Ref    = useRef(null);
   const runeRing2Ref    = useRef(null);
   const infoCardRef     = useRef(null);
@@ -54,11 +54,11 @@ function Events() {
   const progressLineRef = useRef(null);
   const nodesRef        = useRef([]);
 
-  // ── Rune ring spin ──
+  // ── Settle/Clean setup ──
   useEffect(() => {
+    // Keep rune rings static and aligned
     if (!runeRing1Ref.current || !runeRing2Ref.current) return;
-    gsap.to(runeRing1Ref.current, { rotation: 360,  duration: 16, ease: "none", repeat: -1 });
-    gsap.to(runeRing2Ref.current, { rotation: -360, duration: 24, ease: "none", repeat: -1 });
+    gsap.set([runeRing1Ref.current, runeRing2Ref.current], { rotation: 0 });
   }, []);
 
   // ── Particle burst ──
@@ -86,23 +86,50 @@ function Events() {
     isInfoOpenRef.current = true;
     setInfoOpen(true);
     card.style.pointerEvents = "auto";
+
+    // Animate the inner stage with a subtle pulse when opening info
+    const stage = stageRef.current;
+    if (stage) {
+      gsap.to(stage, { scale: 1.05, duration: 0.25, ease: "power2.out",
+        onComplete: () => gsap.to(stage, { scale: 1, duration: 0.35, ease: "back.out(1.7)" })
+      });
+    }
+
+    // Slide card in from slightly below with a spring feel
     gsap.fromTo(card,
-      { opacity: 0, yPercent: 10, xPercent: -50, scale: 0.95 },
-      { opacity: 1, yPercent: -50, xPercent: -50, scale: 1, duration: 0.52, ease: "power3.out" }
+      { opacity: 0, y: 40, scale: 0.92, rotationX: 8 },
+      { opacity: 1, y: 0, scale: 1, rotationX: 0,
+        duration: 0.55, ease: "back.out(1.4)",
+        clearProps: "rotationX" }
     );
+
+    // Particle burst for visual feedback
+    fireBurst(0.7);
   };
 
   const closeInfo = () => {
     const card = infoCardRef.current;
     if (!card) return;
+
     gsap.to(card, {
-      opacity: 0, yPercent: 0, scale: 0.95, duration: 0.32, ease: "power2.in",
+      opacity: 0, y: 30, scale: 0.92, duration: 0.35, ease: "power3.in",
       onComplete: () => {
         card.style.pointerEvents = "none";
         isInfoOpenRef.current = false;
         setInfoOpen(false);
+        gsap.set(card, { y: 0 });
       }
     });
+
+    // Subtle shake on the eye when closing
+    const wrapper = eyeWrapperRef.current;
+    if (wrapper) {
+      gsap.to(wrapper, {
+        x: gsap.utils.random(-5, 5), y: gsap.utils.random(-3, 3),
+        duration: 0.04, repeat: 5, yoyo: true, ease: "none",
+        clearProps: "x,y"
+      });
+    }
   };
 
   const handleEyeClick = () => {
@@ -112,49 +139,117 @@ function Events() {
   };
 
   // ── Main eye transition ──
+  // Sequence: EYE CLOSES (image fades with it) → image SWAPS → EYE OPENS (new image reveals)
   const triggerTransition = (nextIndex) => {
     if (isAnimatingRef.current) return;
     isAnimatingRef.current = true;
 
-    // Close info panel if open
-    if (isInfoOpenRef.current) {
-      closeInfo();
-    }
-
-    const openImg  = eyeOpenImgRef.current;
-    const closeImg = eyeCloseImgRef.current;
-    const innerImg = eyeInnerImgRef.current;
+    const stage    = stageRef.current;
     const wrapper  = eyeWrapperRef.current;
     const rings    = [runeRing1Ref.current, runeRing2Ref.current];
+    const card     = infoCardRef.current;
+    const openImg  = eyeOpenImgRef.current;
+    const closeImg = eyeCloseImgRef.current;
 
-    const tl = gsap.timeline({ onComplete: () => { isAnimatingRef.current = false; } });
+    const images     = stage ? Array.from(stage.querySelectorAll(".agamotto-inner-img")) : [];
+    const currentImg = images[currentIdx];
+    const nextImg    = images[nextIndex];
+    const wasInfoOpen = isInfoOpenRef.current;
 
-    // Phase 1 — Click flash & burst
-    tl.call(() => fireBurst(1.3), null, 0);
-    tl.to(rings, { filter: "brightness(4) drop-shadow(0 0 20px #e6b800)", duration: 0.2, ease: "power2.out" }, 0);
-    tl.to(wrapper, {
-      x: gsap.utils.random(-5, 5), y: gsap.utils.random(-4, 4),
-      duration: 0.06, repeat: 6, yoyo: true, ease: "none", clearProps: "x,y",
-    }, 0);
+    // Prep: ensure next image is invisible and ready
+    if (nextImg) gsap.set(nextImg, { opacity: 0, scale: 1, filter: "blur(0px) brightness(1)" });
 
-    // Phase 2 — Close
-    tl.to(innerImg, { opacity: 0, scale: 0.9, duration: 0.32, ease: "power2.in" }, 0.1);
-    tl.to(openImg,  { opacity: 0, duration: 0.38, ease: "power2.inOut" }, 0.15);
-    tl.to(closeImg, { opacity: 1, duration: 0.38, ease: "power2.inOut" }, 0.15);
+    const CLOSE_DUR  = 0.38; // how long the eye takes to fully close
+    const HOLD_DUR   = 0.08; // brief moment fully closed (image swaps here)
+    const OPEN_DUR   = 0.42; // how long the eye takes to fully open
+    const CLOSE_AT   = 0;    // when closing starts
+    const SWAP_AT    = CLOSE_DUR + HOLD_DUR; // when the image swap happens
+    const OPEN_AT    = SWAP_AT; // eye starts opening right as image swaps
 
-    // Phase 3 — Swap content while closed
+    const tl = gsap.timeline({
+      onComplete: () => { isAnimatingRef.current = false; }
+    });
+
+    // ━━ BEAT 1: EYE CLOSES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // Temporarily elevate eye_close above the inner stage (z:8) so it fully covers it
+    tl.set(closeImg, { zIndex: 9 }, CLOSE_AT);
+
+    // Rings flare up
+    tl.call(() => {
+      fireBurst(1.2);
+      rings.forEach(r => r?.classList.add("flare"));
+    }, null, CLOSE_AT);
+    tl.to(rings, { scale: 1.1, duration: CLOSE_DUR * 0.6, ease: "power2.out" }, CLOSE_AT);
+
+    // Dismiss info card in sync with closing (if open)
+    if (wasInfoOpen) {
+      tl.to(card, { opacity: 0, y: 25, scale: 0.93, duration: CLOSE_DUR * 0.8, ease: "power2.in" }, CLOSE_AT);
+    }
+
+    // eye_open fades OUT → eye_close fades IN (the actual close blink)
+    tl.to(openImg,  { opacity: 0, duration: CLOSE_DUR, ease: "power2.inOut" }, CLOSE_AT);
+    tl.to(closeImg, { opacity: 1, duration: CLOSE_DUR, ease: "power2.inOut" }, CLOSE_AT);
+
+    // The current event image darkens and shrinks with the closing eye
+    if (currentImg) {
+      tl.to(currentImg, {
+        opacity: 0,
+        scale: 0.88,
+        filter: "blur(4px) brightness(0.3)",
+        duration: CLOSE_DUR,
+        ease: "power2.inOut"
+      }, CLOSE_AT);
+    }
+
+    // Subtle wrapper squeeze (feels like mechanical iris closing)
+    tl.to(wrapper, { scaleY: 0.92, scaleX: 1.04, duration: CLOSE_DUR, ease: "power2.inOut" }, CLOSE_AT);
+
+    // ━━ BEAT 2: HARD SWAP (eye fully closed — eye_close covers everything) ━━
     tl.call(() => {
       setCurrentIdx(nextIndex);
       setDisplayIdx(nextIndex);
-      innerImg.src = eventDatabase[nextIndex].image;
-    }, null, 0.6);
+      if (wasInfoOpen) gsap.set(card, { y: 0 });
+      // Snap next image into position while hidden behind eye_close
+      if (nextImg) gsap.set(nextImg, { opacity: 1, scale: 0.9, filter: "blur(3px) brightness(0.5)" });
+    }, null, SWAP_AT);
 
-    // Phase 4 — Open
-    tl.to(closeImg, { opacity: 0, duration: 0.52, ease: "power3.out" }, 0.72);
-    tl.to(openImg,  { opacity: 1, duration: 0.52, ease: "power3.out" }, 0.72);
-    tl.to(innerImg, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.5)" }, 0.88);
-    tl.call(() => fireBurst(0.75), null, 0.78);
-    tl.to(rings, { filter: "brightness(1) drop-shadow(0 0 6px rgba(230,184,0,0.5))", duration: 0.6 }, 0.85);
+    // ━━ BEAT 3: EYE OPENS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // eye_close fades OUT → eye_open fades IN
+    tl.to(closeImg, { opacity: 0, duration: OPEN_DUR, ease: "power2.inOut" }, OPEN_AT);
+    tl.to(openImg,  { opacity: 1, duration: OPEN_DUR, ease: "power2.inOut" }, OPEN_AT);
+
+    // Wrapper iris opens back — bouncy spring feel
+    tl.to(wrapper, { scaleY: 1, scaleX: 1, duration: OPEN_DUR, ease: "back.out(1.6)" }, OPEN_AT);
+
+    // New image blooms in as the eye opens — scales up and sharpens
+    if (nextImg) {
+      tl.to(nextImg, {
+        opacity: 1,
+        scale: 1,
+        filter: "blur(0px) brightness(1)",
+        duration: OPEN_DUR * 0.85,
+        ease: "power2.out"
+      }, OPEN_AT + OPEN_DUR * 0.15); // slight delay so image appears as the eye iris opens
+    }
+
+    // Rings settle with elastic snap and second burst
+    tl.call(() => {
+      fireBurst(0.8);
+      rings.forEach(r => r?.classList.remove("flare"));
+    }, null, OPEN_AT + OPEN_DUR * 0.5);
+    tl.to(rings, { scale: 1, duration: 0.5, ease: "elastic.out(1, 0.4)" }, OPEN_AT + OPEN_DUR * 0.5);
+
+    // Re-open info card after eye is open (if it was open before)
+    if (wasInfoOpen) {
+      tl.fromTo(card,
+        { opacity: 0, y: 30, scale: 0.93 },
+        { opacity: 1, y: 0,  scale: 1, duration: 0.45, ease: "back.out(1.4)" },
+        OPEN_AT + OPEN_DUR * 0.6
+      );
+    }
+
+    // Reset eye_close z-index back to normal (below stage) once transition is fully done
+    tl.set(closeImg, { zIndex: 5 });
   };
 
   const handleNext = () => triggerTransition((currentIdx + 1) % eventDatabase.length);
@@ -270,67 +365,80 @@ function Events() {
           </div>
 
           <div className="agamotto-showcase">
-            <div className="agamotto-eye-wrapper" ref={eyeWrapperRef}>
-              {/* Rune rings */}
-              <div className="rune-ring rune-ring-1" ref={runeRing1Ref}>
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <span key={i} className="rune-tick"
-                    style={{ transform: `rotate(${i * 30}deg) translateY(-50%)` }} />
-                ))}
+            <div className="agamotto-eye-container">
+              <div className="agamotto-eye-wrapper" ref={eyeWrapperRef}>
+                {/* Rune rings */}
+                <div className="rune-ring rune-ring-1" ref={runeRing1Ref}>
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <span key={i} className="rune-tick"
+                      style={{ transform: `rotate(${i * 30}deg) translateY(-50%)` }} />
+                  ))}
+                </div>
+                <div className="rune-ring rune-ring-2" ref={runeRing2Ref}>
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <span key={i} className="rune-diamond"
+                      style={{ transform: `rotate(${i * 45}deg) translateY(-50%)` }} />
+                  ))}
+                </div>
+
+                {/* Event image — z:8 keeps it above eye frame images so the event image shows inside the eye */}
+                <div
+                  ref={stageRef}
+                  className="agamotto-inner-stage"
+                  onClick={handleEyeClick}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="View event details"
+                  onKeyDown={e => e.key === "Enter" && handleEyeClick()}
+                  style={{ zIndex: 8 }}
+                >
+                  {eventDatabase.map((ev, idx) => (
+                    <img
+                      key={ev.id}
+                      src={ev.image}
+                      alt={ev.title}
+                      className="agamotto-inner-img"
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        opacity: idx === currentIdx ? 1 : 0,
+                        transform: "scale(1)",
+                        willChange: "transform, opacity, filter",
+                        pointerEvents: idx === currentIdx ? "auto" : "none"
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Close image — hidden by default, shown only during nav transitions */}
+                <img ref={eyeCloseImgRef} src={eyeClose} alt=""
+                  className="agamotto-eye-img agamotto-close-img" aria-hidden="true" style={{ opacity: 0 }} />
+
+                {/* Open image — visible by default */}
+                <img ref={eyeOpenImgRef} src={eyeOpen} alt="Eye of Agamotto"
+                  className="agamotto-eye-img agamotto-open-img" style={{ opacity: 1 }} />
+
+                {/* Particle burst */}
+                <div className="agamotto-particles" aria-hidden="true">
+                  {Array.from({ length: PARTICLE_COUNT }).map((_, i) => (
+                    <span key={i} className="agamotto-particle"
+                      ref={el => particleRefs.current[i] = el}
+                      style={{ '--p-size': `${3 + Math.random() * 8}px`, '--p-hue': Math.random() < 0.65 ? '145' : '120' }} />
+                  ))}
+                </div>
+
+                {/* Gemstone Nav buttons — positioned exactly over the green gems in the image */}
+                <button className="agamotto-gem-btn prev" onClick={handlePrev} aria-label="Previous event" data-tooltip="PREVIOUS" />
+                <button className="agamotto-gem-btn next" onClick={handleNext} aria-label="Next event" data-tooltip="NEXT" />
               </div>
-              <div className="rune-ring rune-ring-2" ref={runeRing2Ref}>
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <span key={i} className="rune-diamond"
-                    style={{ transform: `rotate(${i * 45}deg) translateY(-50%)` }} />
-                ))}
-              </div>
-
-              {/* Event image — fills wrapper, shows through transparent eye opening */}
-              <div
-                className="agamotto-inner-stage"
-                onClick={handleEyeClick}
-                role="button"
-                tabIndex={0}
-                aria-label="View event details"
-                onKeyDown={e => e.key === "Enter" && handleEyeClick()}
-              >
-                <img
-                  ref={eyeInnerImgRef}
-                  src={eventDatabase[0].image}
-                  alt={activeEvent.title}
-                  className="agamotto-inner-img"
-                />
-              </div>
-
-              {/* Close image — hidden by default */}
-              <img ref={eyeCloseImgRef} src={agamottoClose} alt=""
-                className="agamotto-eye-img agamotto-close-img" aria-hidden="true" />
-
-              {/* Open image — visible by default */}
-              <img ref={eyeOpenImgRef} src={agamottoOpen} alt="Eye of Agamotto"
-                className="agamotto-eye-img agamotto-open-img" />
-
-              {/* Particle burst */}
-              <div className="agamotto-particles" aria-hidden="true">
-                {Array.from({ length: PARTICLE_COUNT }).map((_, i) => (
-                  <span key={i} className="agamotto-particle"
-                    ref={el => particleRefs.current[i] = el}
-                    style={{ '--p-size': `${3 + Math.random() * 8}px`, '--p-hue': Math.random() < 0.65 ? '45' : '38' }} />
-                ))}
-              </div>
-
-              {/* Nav buttons — inside wrapper */}
-              <button className="agamotto-nav-btn prev" onClick={handlePrev} aria-label="Previous event">
-                <span className="nav-arrow">❮</span>
-              </button>
-              <button className="agamotto-nav-btn next" onClick={handleNext} aria-label="Next event">
-                <span className="nav-arrow">❯</span>
-              </button>
             </div>
 
             {/* Click Guide */}
-            <div className="agamotto-click-guide">
-              <span className="guide-text">Click the core to reveal details</span>
+            <div className={`agamotto-click-guide ${infoOpen ? "info-open" : ""}`}>
+              <span className="guide-text">[ CLICK EYE IMAGE TO REVEAL SAGA DETAILS ]</span>
             </div>
 
             {/* Dot indicators */}
@@ -372,6 +480,10 @@ function Events() {
                     <strong className="meta-value">{activeEvent.participants}</strong>
                   </div>
                 </div>
+                <button className="saga-cta-btn" onClick={() => alert(`Entering ${activeEvent.title}...`)}>
+                  <span>ENTER SAGA</span>
+                  <div className="btn-glow-effect"></div>
+                </button>
               </div>
             </div>
           </div>
