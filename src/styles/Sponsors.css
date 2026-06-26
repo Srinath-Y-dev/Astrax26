@@ -112,7 +112,7 @@
 }
 
 .sponsors-tagline {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-cinzel-dec);
   color: #00ffff;
   letter-spacing: 5px;
   font-size: 0.8rem;
@@ -137,7 +137,7 @@
 }
 
 .sponsors-subtitle {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-cinzel-dec);
   font-size: 1rem;
   color: #38bdf8;
   margin: 6px 0 12px;

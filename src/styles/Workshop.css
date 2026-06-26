@@ -34,7 +34,7 @@
   padding: 10px 24px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: var(--font-bankgothic);
+  font-family: var(--font-orbitron);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 1px;
@@ -94,7 +94,7 @@
 
 .teaser-tagline {
   color: #ff5a36;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-cinzel-dec);
   font-size: 0.9rem;
   letter-spacing: 6px;
   font-weight: 600;
@@ -193,7 +193,7 @@
   padding: 10px 24px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: var(--font-bankgothic);
+  font-family: var(--font-orbitron);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 1px;
@@ -216,7 +216,7 @@
   padding: 10px 24px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: var(--font-bankgothic);
+  font-family: var(--font-orbitron);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 1px;
@@ -561,7 +561,7 @@
 /* Register Buttons */
 .register-now-split-btn {
   padding: 14px 35px;
-  font-family: var(--font-bankgothic);
+  font-family: var(--font-orbitron);
   font-size: 0.95rem;
   font-weight: 800;
   letter-spacing: 2px;

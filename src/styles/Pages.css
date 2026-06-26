@@ -22,7 +22,7 @@
 }
 
 .page-subtitle {
-  font-family: var(--font-cinzel);
+  font-family: var(--font-cinzel-dec);
   font-size: 0.95rem;
   color: #a0a5b5;
   letter-spacing: 1.5px;
@@ -151,7 +151,7 @@
   border: 1px solid;
   border-radius: 4px;
   padding: 8px 18px;
-  font-family: var(--font-bankgothic);
+  font-family: var(--font-orbitron);
   font-size: 1rem;
   letter-spacing: 1px;
   cursor: pointer;

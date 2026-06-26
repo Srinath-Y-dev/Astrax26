@@ -45,6 +45,7 @@
 }
 
 .gallery-tagline {
+  font-family: var(--font-cinzel-dec);
   font-size: 0.9rem;
   letter-spacing: 4px;
   color: #e6a33e;

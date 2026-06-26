@@ -9,7 +9,7 @@
         --portal-gold: #ffd050;
         --portal-gold-glow: rgba(255, 208, 80, 0.5);
         --font-heading: 'Cinzel', serif;
-        --font-body: 'Outfit', sans-serif;
+        --font-body: 'Poppins', sans-serif;
         --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 }

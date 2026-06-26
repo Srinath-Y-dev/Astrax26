@@ -98,7 +98,7 @@
 
 .hero-tagline {
   margin-top: 10px;
-  font-family: var(--font-cinzel);
+  font-family: var(--font-cinzel-dec);
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: 8px;
@@ -203,7 +203,7 @@
 }
 
 .stone-label {
-  font-family: var(--font-cinzel);
+  font-family: var(--font-cinzel-dec);
   font-size: 0.65rem;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -233,7 +233,7 @@
 
 .hero-buttons button {
   padding: 15px 40px;
-  font-family: var(--font-bankgothic);
+  font-family: var(--font-orbitron);
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 3px;

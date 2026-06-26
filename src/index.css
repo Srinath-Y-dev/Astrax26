@@ -42,6 +42,7 @@
   --font-rajdhani: 'Rajdhani', sans-serif;
   --font-bankgothic: 'Bank Gothic', sans-serif;
   --font-avengeance: 'Avengeance Heroic Avenger', sans-serif;
+  --font-poppins: 'Poppins', sans-serif;
   
   --transition-fast: 0.2s ease;
   --transition-med: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -55,7 +56,7 @@
 }
 
 body{
-  font-family: var(--font-montserrat);
+  font-family: var(--font-poppins);
   background: radial-gradient(circle at center, #1E103C 0%, #080510 80%);
   color: var(--marvel-white);
   overflow-x:hidden;
