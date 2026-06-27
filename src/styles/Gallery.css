@@ -422,34 +422,47 @@
 }
 
 .portals-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  pointer-events: none; /* Let clicks pass through to the images */
-  z-index: 5;
+  display: none;
 }
 
 /* Base styles for the content behind the windows */
 .portal-content {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
+  border: 5px solid transparent;
+  border-image: linear-gradient(135deg, #dfb24f 0%, #a37527 50%, #dfb24f 100%) 1;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.7),
+    inset 0 0 20px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(223, 178, 79, 0.2);
+  background: #080510;
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease;
+}
+
+.portal-content::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(223, 178, 79, 0.3);
+  pointer-events: none;
+  z-index: 3;
 }
 
 .portal-content img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 200ms ease-in-out, transform 0.8s ease-out;
+  transition: opacity 300ms ease-in-out, transform 0.8s ease-out;
   cursor: pointer;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 
 .portal-content img.active-image {
-  opacity: 0.6;
+  opacity: 0.75;
   pointer-events: auto;
 }
 
@@ -460,53 +473,78 @@
 
 /* Positioning the images exactly behind the transparent windows using clip-path */
 .portal-left {
-  top: 16.85%;
-  left: 11.04%;
-  width: 16.21%;
-  height: 68.50%;
-  clip-path: polygon(0% 0%, 100% 3.67%, 100% 96.95%, 0% 100%);
+  top: 30%;
+  left: 4.64%;
+  width: 29%;
+  height: 34%;
+  transform: perspective(1000px) rotateY(15deg);
 }
 
 .portal-left img {
   transform: scale(1.0);
 }
 
+.portal-left:hover {
+  transform: perspective(1000px) rotateY(5deg) scale(1.03);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.8),
+    inset 0 0 20px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(223, 178, 79, 0.4);
+}
+
 .portal-left:hover img.active-image {
   opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .portal-center {
-  top: 26.53%;
-  left: 42.18%;
-  width: 15.53%;
-  height: 52.64%;
+  top: 24%;
+  left: 35.5%;
+  width: 29%;
+  height: 34%;
+  transform: perspective(1000px) rotateY(0deg);
 }
 
 .portal-center img {
   transform: scale(1.0);
 }
 
+.portal-center:hover {
+  transform: perspective(1000px) rotateY(0deg) scale(1.03);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.8),
+    inset 0 0 20px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(223, 178, 79, 0.4);
+}
+
 .portal-center:hover img.active-image {
   opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .portal-right {
-  top: 16.85%;
-  left: 72.75%;
-  width: 16.21%;
-  height: 68.50%;
-  clip-path: polygon(0% 3.67%, 100% 0%, 100% 100%, 0% 96.95%);
+  top: 30%;
+  left: 66.36%;
+  width: 29%;
+  height: 34%;
+  transform: perspective(1000px) rotateY(-15deg);
 }
 
 .portal-right img {
   transform: scale(1.0);
 }
 
+.portal-right:hover {
+  transform: perspective(1000px) rotateY(-5deg) scale(1.03);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.8),
+    inset 0 0 20px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(223, 178, 79, 0.4);
+}
+
 .portal-right:hover img.active-image {
   opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 /* --- BUTTONS --- */
