@@ -3,7 +3,7 @@
 .hero-content {
   height: 100vh;
   min-height: 100vh;
-  padding-top: 50px;
+  padding-top: 110px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -73,13 +73,12 @@
 }
 
 .marvel-logo-image {
-  max-width: 520px;
+  max-width: 430px;
   width: 92%;
   height: auto;
   display: block;
   margin: 0 auto;
   filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5)) drop-shadow(0 0 45px rgba(212, 175, 55, 0.2));
-  animation: logo-pulse 3s ease-in-out infinite alternate;
   transition: filter 0.5s ease;
 }
 
