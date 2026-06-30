@@ -7,6 +7,7 @@ import sImg from "../assets/s.png";
 import mImg from "../assets/m.png";
 import spImg from "../assets/sp.png";
 import "../styles/Navbar.css";
+import { triggerRazorpayPayment } from "../utils/payment";
 
 // src/components/Navbar.jsx
 
@@ -85,14 +86,14 @@ function Navbar({ activeTab, onTabChange, forceHidden }) {
           Sponsors
         </li>
         <li className="nav-mobile-register">
-          <button className="register-btn mobile-reg-btn" onClick={(e) => e.preventDefault()}>
+          <button className="register-btn mobile-reg-btn" onClick={() => triggerRazorpayPayment({ amount: 50, description: "Astra X All Access Registration" })}>
             Register Now
           </button>
         </li>
       </ul>
 
       <div className="nav-actions-container">
-        <button className="register-btn desktop-reg-btn" onClick={(e) => e.preventDefault()}>
+        <button className="register-btn desktop-reg-btn" onClick={() => triggerRazorpayPayment({ amount: 50, description: "Astra X All Access Registration" })}>
           Register Now
         </button>
       </div>
