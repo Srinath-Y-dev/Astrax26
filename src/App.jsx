@@ -76,15 +76,17 @@ function App() {
 
       {activeTab === "Home" && (
         <>
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="bg-video"
-          >
-            <source src={bgVideo} type="video/mp4" />
-          </video>
+          <div className="bg-video-container">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="bg-video"
+            >
+              <source src={bgVideo} type="video/mp4" />
+            </video>
+          </div>
           <div className="overlay"></div>
         </>
       )}

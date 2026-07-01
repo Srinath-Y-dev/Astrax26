@@ -29,12 +29,8 @@ function Hero({ onTabChange }) {
         ))}
       </div>
 
-      {/* Main title with glow reveal */}
-      <div className="marvel-logo-box">
-        <h1 className="marvel-logo-heading">
-          <img src={titleImg} alt="ASTRA X 2026" className="marvel-logo-image" />
-        </h1>
-      </div>
+      {/* Spacer to align with background video logo */}
+      <div className="hero-logo-spacer"></div>
 
       {/* Event tagline */}
       <p className="hero-tagline">

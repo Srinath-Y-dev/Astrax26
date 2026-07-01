@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import navLogo from "../assets/nav-logo.png";
+import navLogo from "../assets/title.png";
 import tImg from "../assets/t.png";
 import pImg from "../assets/p.png";
 import rImg from "../assets/r.png";

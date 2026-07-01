@@ -429,22 +429,39 @@
 .portal-content {
   position: absolute;
   z-index: 2;
-  border: 5px solid transparent;
-  border-image: linear-gradient(135deg, #dfb24f 0%, #a37527 50%, #dfb24f 100%) 1;
   box-shadow: 
     0 15px 35px rgba(0, 0, 0, 0.7),
     inset 0 0 20px rgba(0, 0, 0, 0.6),
     0 0 15px rgba(223, 178, 79, 0.2);
+  background: transparent;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease;
+}
+
+.portal-content-inner {
+  position: absolute;
+  top: 13.5%;
+  bottom: 13.5%;
+  left: 12.5%;
+  right: 12.5%;
   background: #080510;
   overflow: hidden;
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease;
+  z-index: 2;
+}
+
+.portal-frame-individual {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+  object-fit: fill;
 }
 
 .portal-content::after {
   content: '';
   position: absolute;
   inset: 2px;
-  border: 1px solid rgba(223, 178, 79, 0.3);
   pointer-events: none;
   z-index: 3;
 }
@@ -471,13 +488,14 @@
   pointer-events: none;
 }
 
-/* Positioning the images exactly behind the transparent windows using clip-path */
+/* Positioning the images exactly behind the transparent windows */
 .portal-left {
-  top: 30%;
-  left: 4.64%;
-  width: 29%;
-  height: 34%;
+  top: 28%;
+  left: 1%;
+  width: 31%;
+  height: 38%;
   transform: perspective(1000px) rotateY(15deg);
+  z-index: 2;
 }
 
 .portal-left img {
@@ -498,11 +516,12 @@
 }
 
 .portal-center {
-  top: 24%;
-  left: 35.5%;
-  width: 29%;
-  height: 34%;
+  top: 21%;
+  left: 34.5%;
+  width: 31%;
+  height: 38%;
   transform: perspective(1000px) rotateY(0deg);
+  z-index: 5;
 }
 
 .portal-center img {
@@ -523,11 +542,12 @@
 }
 
 .portal-right {
-  top: 30%;
-  left: 66.36%;
-  width: 29%;
-  height: 34%;
+  top: 28%;
+  left: 68%;
+  width: 31%;
+  height: 38%;
   transform: perspective(1000px) rotateY(-15deg);
+  z-index: 2;
 }
 
 .portal-right img {

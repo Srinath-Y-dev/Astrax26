@@ -4,7 +4,7 @@ import '../styles/Gallery.css';
 // Background image
 import galleryBg from '../assets/gallery-bg.png';
 // Portals image
-import portalsImg from '../assets/new_portals.png';
+import portalsImg from '../assets/new_portals1.png';
 // Title image
 import galleryTitleImg from '../assets/gallery-title.png';
 
@@ -71,34 +71,43 @@ const Gallery = () => {
           
           {/* Images inside the windows */}
           <div className="portal-content portal-left">
-            {leftImages.map((img, idx) => (
-              <img 
-                key={`left-${idx}`} 
-                src={img} 
-                alt={`Ironman ${idx + 1}`} 
-                className={leftIndex === idx ? 'active-image' : 'inactive-image'}
-              />
-            ))}
+            <div className="portal-content-inner">
+              {leftImages.map((img, idx) => (
+                <img 
+                  key={`left-${idx}`} 
+                  src={img} 
+                  alt={`Ironman ${idx + 1}`} 
+                  className={leftIndex === idx ? 'active-image' : 'inactive-image'}
+                />
+              ))}
+            </div>
+            <img src={portalsImg} alt="Frame" className="portal-frame-individual" />
           </div>
           <div className="portal-content portal-center">
-            {centerImages.map((img, idx) => (
-              <img 
-                key={`center-${idx}`} 
-                src={img} 
-                alt={`Thor ${idx + 1}`} 
-                className={centerIndex === idx ? 'active-image' : 'inactive-image'}
-              />
-            ))}
+            <div className="portal-content-inner">
+              {centerImages.map((img, idx) => (
+                <img 
+                  key={`center-${idx}`} 
+                  src={img} 
+                  alt={`Thor ${idx + 1}`} 
+                  className={centerIndex === idx ? 'active-image' : 'inactive-image'}
+                />
+              ))}
+            </div>
+            <img src={portalsImg} alt="Frame" className="portal-frame-individual" />
           </div>
           <div className="portal-content portal-right">
-            {rightImages.map((img, idx) => (
-              <img 
-                key={`right-${idx}`} 
-                src={img} 
-                alt={`Captain America ${idx + 1}`} 
-                className={rightIndex === idx ? 'active-image' : 'inactive-image'}
-              />
-            ))}
+            <div className="portal-content-inner">
+              {rightImages.map((img, idx) => (
+                <img 
+                  key={`right-${idx}`} 
+                  src={img} 
+                  alt={`Captain America ${idx + 1}`} 
+                  className={rightIndex === idx ? 'active-image' : 'inactive-image'}
+                />
+              ))}
+            </div>
+            <img src={portalsImg} alt="Frame" className="portal-frame-individual" />
           </div>
           
           {/* The main portals frame overlay */}

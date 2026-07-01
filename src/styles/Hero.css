@@ -48,14 +48,10 @@
 
 /* MARVEL LOGO REVEAL ASSEMBLY */
 
-.marvel-logo-box {
-  padding: 10px 0;
-  display: inline-block;
-  transform: scale(0.9);
-  opacity: 0;
-  animation: logo-assemble 1.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-  position: relative;
-  z-index: 2;
+.hero-logo-spacer {
+  height: 280px;
+  width: 100%;
+  pointer-events: none;
 }
 
 /* Logo outer ring glow on hover */
